@@ -1,0 +1,12 @@
+# Base de datos local
+mandaditos.db
+
+# Entornos virtuales y caché de Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Configuración del editor
+.vscode/

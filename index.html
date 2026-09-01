@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandaditos Comunitarios - Multirol</title>
+    <link rel="stylesheet" href="style.css">
+    <!--<script src="https://accounts.google.com/gsi/client" async defer></script>-->
+</head>
+<body>
+    <div class="container">
+        <h1>🛵 Mandaditos Comunitarios</h1>
+
+        <!-- SECCIÓN 1: LOGIN / REGISTRO -->
+        <div id="loginSection">
+            <h2 id="formTitle">Iniciar Sesión</h2>
+            
+            <!-- Formulario de Login -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="loginEmail" placeholder="correo@ejemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="loginPassword" placeholder="Tu contraseña" required>
+                </div>
+                <button type="submit">Entrar</button>
+            </form>
+            <div style="margin: 20px 0; text-align: center;">
+                <div id="g_id_onload"
+                data-client_id="TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com"
+                data-callback="handleGoogleResponse"
+                data-auto_prompt="false">
+            </div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-width="100%"></div>
+</div>
+
+            <!-- Formulario de Registro (Oculto por defecto) -->
+            <form id="registerForm" style="display: none;">
+                <div class="form-group">
+                    <label>Nuevo Usuario:</label>
+                    <input type="text" id="regUsername" placeholder="Elige un usuario" required>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
+                </div>
+                <div class="form-group">
+                    <label>Selecciona tu Rol:</label>
+                    <select id="regRole" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: white;">
+                        <option value="client">Cliente (Quiero pedir mandaditos)</option>
+                        <option value="driver">Repartidor (Quiero hacer entregas)</option>
+                    </select>
+                </div>
+                <button type="submit">Registrarse</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 15px;">
+                <a href="register.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                ¿No tienes cuenta? Regístrate aquí
+            </a>
+</p>
+        </div>
+
+        <!-- SECCIÓN 2: VISTA DE CLIENTE -->
+        <div id="clientView" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span id="clientWelcome" style="font-weight: bold; color: var(--primary-color);"></span>
+                <button onclick="logout()" style="width: auto; padding: 6px 12px; background: #64748b; font-size: 12px;">Cerrar Sesión</button>
+            </div>
+
+            <h2>Registrar Nuevo Pedido</h2>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Descripción del encargo:</label>
+                    <textarea id="description" placeholder="Ej. 1 kilo de tortillas y refresco" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Lugar de recolección:</label>
+                    <input type="text" id="pickup_location" placeholder="Ej. Tortillería Local" required>
+                </div>
+                <div class="form-group">
+                    <label>Lugar de entrega:</label>
+                    <input type="text" id="delivery_location" placeholder="Ej. Calle Principal #10" required>
+                </div>
+                <div class="form-group">
+                    <label>Recompensa ($):</label>
+                    <input type="number" step="0.01" id="reward" placeholder="Ej. 35.00" required>
+                </div>
+                <button type="submit">Crear Pedido</button>
+            </form>
+
+            <h2>Mis Pedidos Activos</h2>
+            <div id="clientOrdersList">Cargando tus pedidos...</div>
+        </div>
+
+        <!-- SECCIÓN 3: VISTA DE REPARTIDOR -->
+        <div id="driverView" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <span id="driverWelcome" style="font-weight: bold; color: var(--success-color);"></span>
+                <button onclick="logout()" style="width: auto; padding: 6px 12px; background: #64748b; font-size: 12px;">Cerrar Sesión</button>
+            </div>
+
+            <h2>Bolsa de Pedidos Disponibles (Comunidad)</h2>
+            <div id="availableOrdersList">Buscando mandaditos cercanos...</div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

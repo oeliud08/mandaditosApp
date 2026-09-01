@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Mandaditos Comunitarios</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🛵 Crear Cuenta Nueva</h1>
+        
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Nombre de Usuario:</label>
+                <input type="text" id="regUsername" placeholder="Elige tu usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Correo Electrónico:</label>
+                <input type="email" id="regEmail" placeholder="correo@ejemplo.com" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="regPassword" placeholder="Crea una contraseña" required>
+            </div>
+            <div class="form-group">
+                <label>Selecciona tu Rol:</label>
+                <select id="regRole" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: white;">
+                    <option value="client">Cliente (Quiero pedir mandaditos)</option>
+                    <option value="driver">Repartidor (Quiero hacer entregas)</option>
+                </select>
+            </div>
+            <button type="submit">Registrarse</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 15px;">
+            <a href="index.html" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                ¿Ya tienes cuenta? Inicia sesión aquí
+            </a>
+        </p>
+    </div>
+
+    <script src="register.js"></script>
+</body>
+</html>
