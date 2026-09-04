@@ -25,7 +25,14 @@
                     <label>Contraseña:</label>
                     <input type="password" id="loginPassword" placeholder="Tu contraseña" required>
                 </div>
-                <button type="submit">Entrar</button>
+                <div class="form-group">
+                <label>Iniciar sesión como:</label>
+                <select id="loginRole" style="width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-color); background: white;">
+                    <option value="client">Cliente (Pedir mandaditos)</option>
+                    <option value="driver">Repartidor (Hacer entregas)</option>
+                </select>
+                </div>
+                <button type="submit">Iniciar Sesión</button>
             </form>
             <div style="margin: 20px 0; text-align: center;">
                 <div id="g_id_onload"

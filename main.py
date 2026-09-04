@@ -20,14 +20,16 @@ def init_db():
     conn = sqlite3.connect("mandaditos.db")
     cursor = conn.cursor()
     
-    # Creamos la tabla 'orders' si es que no existe todavía en el archivo
+    # Creamos la tabla 'orders' 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS orders (
             id INTEGER PRIMARY KEY AUTOINCREMENT,  -- Identificador único de cada pedido (autoincrementable)
             client_name TEXT,                      -- Nombre del vecino o cliente que hace el pedido
             description TEXT,                      -- Qué hay que comprar o recoger
-            pickup_location TEXT,                  -- Dónde se debe realizar la recolección
+            pickup_location TEXT,                  -- Dónde se debe realizar la recolección 
+            --implementar maps en pickup location 
             delivery_location TEXT,                -- A dónde se debe entregar
+            --implementar maps en dropoff location 
             reward REAL,                           -- Cuánto se pagará por el servicio (propina/ganancia)
             status TEXT DEFAULT 'pendiente'        -- Estado actual del pedido ('pendiente', 'en_camino', 'completado')
         )
@@ -160,6 +162,7 @@ class UserRegister(BaseModel):
 class UserLogin(BaseModel):
     email: str
     password: str
+    role: str #Nuevo campo requerido desde el login
 
 class UserRegister(BaseModel):
     username: str
@@ -227,14 +230,17 @@ def register_user(user: UserRegister):
 def login(data: UserLogin):
     with sqlite3.connect("mandaditos.db") as conn:
         cursor = conn.cursor()
-        
         email_clean = data.email.strip().lower()
         cursor.execute("SELECT id, username, password, role FROM users WHERE email = ?", (email_clean,))
         user = cursor.fetchone()
     
     if not user or user[2] != data.password:
         raise HTTPException(status_code=400, detail="Correo o contraseña incorrectos")
-        
+
+    #Validad que el rol seleccionado coincida con elde la base de daros 
+    if user[3] != data.role:
+        raise HTTPException(status_code=400, detail={"Esta cuenta no esta registrada como{data.role}."})
+
     return {
         "status": "success",
         "id": user[0],
