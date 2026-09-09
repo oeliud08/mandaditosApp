@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Repartidor - Mandaditos</title>
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="margin: 0; font-size: 22px;">🛵 Panel de Repartidor</h1>
+            <button id="logoutBtn" style="background: #dc3545; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">
+            Cerrar Sesión
+            </button>
+        </div>
+
+        <!-- Saludo al repartidor -->
+        <p id="driverWelcome" style="font-weight: 600; color: var(--success-color); margin-bottom: 20px;"></p>
+
+        <!-- En este contenedor se mostraran los pedidos en curso -->
+        <h2>Mi Viaje en Curso 🚀</h2>
+        <div id="activeOrderContainer">
+            <p class="empty-state">No tienes ningún viaje activo. ¡Toma un mandadito!</p>
+        </div>
+
+        <hr style="margin: 30px 0;">
+
+        <!-- En este contenedor se mostraran los pedidos para tomar -->
+        <h2>Bolsa de Pedidos Disponibles</h2>
+        <div id="ordersContainer">Cargando mandaditos cercanos...</div>
+    </div>
+    
+    <script src="/driver/driver.js"></script>
+</body>
+</html>

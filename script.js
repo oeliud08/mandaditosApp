@@ -28,9 +28,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
             // Redirigir según su rol confirmado
             if (data.role === "client") {
-                window.location.href = "client.html";
+                window.location.href = "client/client.html";
             } else if (data.role === "driver") {
-                window.location.href = "driver.html";
+                window.location.href = "driver/driver.html";
             }
         } else {
             alert(data.detail || "Error al iniciar sesión");
