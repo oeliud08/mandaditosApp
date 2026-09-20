@@ -1,4 +1,4 @@
-const API_URL = "https://mandaditosapp.onrender.com/";
+const API_URL = "https://mandaditosapp.onrender.com";
 
 function processAndValidateEmail(rawEmail) {
     const normalizedEmail = rawEmail.trim().toLowerCase();

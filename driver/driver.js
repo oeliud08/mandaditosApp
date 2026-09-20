@@ -1,7 +1,7 @@
 // 1. Verificamos que el archivo JavaScript cargue correctamente en el navegador
 console.log("🟢 Archivo driver.js cargado con éxito");
 
-const API_URL = "https://mandaditosapp.onrender.com/";
+const API_URL = "https://mandaditosapp.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("🟢 DOM completamente cargado. Inicializando panel de repartidor...");
