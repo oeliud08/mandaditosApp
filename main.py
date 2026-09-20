@@ -1,7 +1,7 @@
-from fastapi import FastAPI, HTTPException
+import sqlite3
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import sqlite3
 
 app = FastAPI()
 
@@ -270,7 +270,17 @@ def get_driver_orders(driver_id: int):
 def home():
     return {"message": "Bienvenido a la API de Mandaditos Comunitarios 🚀 YUJUUU!"}
 
+def get_db():
+  conn = sqlite3.connect("database.db")  # O el nombre de tu archivo .db
+  conn.row_factory = sqlite3.Row
+  try:
+    yield conn
+  finally:
+    conn.close()
+
 @app.get("/usuarios")
-def ver_usuarios(db: Session = Depends(get_db)):
-    usuarios = db.query(Usuario).all()  # Ajusta "Usuario" al nombre de tu modelo
-    return usuarios
+def obtener_usuarios(db=Depends(get_db)):
+  cursor = db.cursor()
+  cursor.execute("SELECT * FROM usuarios")  # Ajusta el nombre de tu tabla
+  usuarios = cursor.fetchall()
+  return [dict(row) for row in usuarios]
