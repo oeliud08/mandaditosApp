@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://mandaditosapp.onrender.com/";
 
 // 1. Validar sesión y rol del cliente al cargar
 const username = localStorage.getItem("username");
