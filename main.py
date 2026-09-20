@@ -269,3 +269,8 @@ def get_driver_orders(driver_id: int):
 @app.get("/")
 def home():
     return {"message": "Bienvenido a la API de Mandaditos Comunitarios 🚀 YUJUUU!"}
+
+@app.get("/usuarios")
+def ver_usuarios(db: Session = Depends(get_db)):
+    usuarios = db.query(Usuario).all()  # Ajusta "Usuario" al nombre de tu modelo
+    return usuarios
