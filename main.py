@@ -227,7 +227,7 @@ def accept_order(order_id: int, data: AcceptOrderRequest):
             
     return {"status": "success", "message": "¡Pedido aceptado con éxito! Ve por él."}
 
-# 5. Actualizar estado
+# 5. Actualizar estado del pedido
 @app.patch("/orders/{order_id}/status")
 def update_order_status(order_id: int, status: str):
     with sqlite3.connect("mandaditos.db") as conn:
@@ -237,7 +237,7 @@ def update_order_status(order_id: int, status: str):
         
     return {"status": "success", "message": f"El pedido {order_id} ahora está: {status}"}
 
-#6. Pedidos aceptados por el driver
+
 # 6. Pedidos aceptados por el driver
 @app.get("/orders/driver/{driver_id}")
 def get_driver_orders(driver_id: int):
