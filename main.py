@@ -5,13 +5,16 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Configuración de CORS obligatoria
+# Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://mandaditoswebapp.netlify.app",
+        "http://localhost:3000",
+    ],  # Permite tu web y pruebas locales
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # Permite GET, POST, etc.
+    allow_headers=["*"],  # Permite todos los headers
 )
 
 # Inicialización de Base de Datos
