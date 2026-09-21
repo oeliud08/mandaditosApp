@@ -1,0 +1,237 @@
+/* --- Media Queries para Responsividad --- */
+
+/* Pantallas medianas y tablets (menores a 1024px) */
+@media (max-width: 1024px) {
+  .brand-content h1 {
+    font-size: 2.4rem;
+  }
+  
+  .left-illustration {
+    width: 100%;
+    max-width: 450px; /* Ampliamos el ancho máximo para que cubra bien los lados */
+    height: auto;
+    display: block;
+    margin-top: auto; /* Empuja la imagen completamente hacia la parte inferior */
+    object-fit: contain;
+  }
+}
+
+/* Dispositivos móviles y tablets pequeñas (menores a 768px) */
+@media (max-width: 768px) {
+  /* Ocultamos el panel izquierdo con la ilustración para dar todo el espacio al formulario */
+  .login-left-panel {
+    flex: 1.2;
+    background-color: #2b3e50;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Separa el texto arriba y la imagen abajo */
+    align-items: center;
+    padding: 40px 40px 0 40px; /* Quitamos el padding inferior para que la imagen toque el borde si se desea */
+    position: relative;
+    overflow: hidden;
+}
+  .login-right-panel {
+    width: 100%;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+
+  .form-card {
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .form-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+}
+
+/* src/views/Login.css */
+/* src/views/Login.css */
+
+/* Limpiamos la configuración global para que la app mande en la pantalla */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.login-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+/* Panel Izquierdo */
+.login-left-panel {
+  flex: 1.2; /* Le da un poco más de peso proporcional frente al formulario */
+  background-color: #2b3e50;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.brand-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.brand-content h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-top: 20px;
+}
+
+.left-illustration {
+  width: 85%;
+  max-width: 420px;
+  height: auto;
+  margin-top: 10px;
+  object-fit: contain;
+}
+
+/* Panel Derecho */
+.login-right-panel {
+  flex: 1;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.form-card {
+  width: 100%;
+  max-width: 380px;
+}
+
+
+.form-card h2 {
+  font-size: 1.8rem;
+  color: #1a1a1a;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 8px 0;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus {
+  border-bottom-color: #1d4ed8;
+}
+
+/* Selector de roles interactivo */
+.role-selector {
+  display: flex;
+  gap: 10px;
+  margin: 25px 0;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.2s ease;
+}
+
+.role-btn.active {
+  background: #ffffff;
+  border-color: #1d4ed8;
+  color: #1d4ed8;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Botón principal */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #1e40af;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.register-link a {
+  color: #1d4ed8;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.powered-by {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* Diseño responsivo para pantallas pequeñas */
+@media (max-width: 768px) {
+  .login-left-panel {
+    display: none;
+  }
+}

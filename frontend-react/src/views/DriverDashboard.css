@@ -1,0 +1,196 @@
+/* Contenedor principal con enfoque Mobile-First */
+.driver-mobile-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Header */
+.driver-header {
+  background-color: #1e293b;
+  color: white;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.driver-info h2 {
+  font-size: 1.1rem;
+  margin: 0 0 4px 0;
+}
+
+.status-badge {
+  font-size: 0.8rem;
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.logout-btn-sm {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.logout-btn-sm:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+/* Pestañas de navegación */
+.driver-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 14px;
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  background-color: #f8fafc;
+}
+
+/* Tarjetas de pedidos */
+.orders-list {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.order-card-mobile {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  border-left: 4px solid #2563eb;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.order-card-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+.payout-tag {
+  background: #dcfce7;
+  color: #15803d;
+  padding: 4px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.order-dest, .order-client {
+  font-size: 0.9rem;
+  color: #475569;
+  margin: 6px 0;
+}
+
+/* Tarjeta de pedido en curso (Acción prioritaria) */
+.active-delivery-card {
+  background: #eff6ff;
+  border: 2px solid #3b82f6;
+  border-radius: 12px;
+  margin: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.15);
+}
+
+.badge-urgent {
+  background: #d97706;
+  color: white;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.active-delivery-card h3 {
+  margin: 12px 0 8px 0;
+  color: #1e3a8a;
+}
+
+/* Botones de acción táctiles grandes */
+.action-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.action-btn.primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background-color: #1d4ed8;
+}
+
+.action-btn.success {
+  background-color: #16a34a;
+  color: white;
+}
+
+.action-btn.success:hover {
+  background-color: #15803d;
+}
+
+.no-orders {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 40px;
+  font-size: 0.95rem;
+  padding: 0 20px;
+}
+.success-tag {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.history-card {
+  border-left-color: #10b981; /* Borde verde para indicar completado */
+  opacity: 0.9;
+}
+
+.history-time {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: block;
+  margin-top: 8px;
+  font-style: italic;
+}
