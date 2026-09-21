@@ -5,8 +5,17 @@ import Register from './views/Register';
 import ClientDashboard from './views/ClientDashboard';
 import DriverDashboard from './views/DriverDashboard';
 
+
+
 export default function App() {
-  const [user, setUser] = useState(null); // Almacena los datos del usuario logueado
+   // Test user for development purposes MODE DEBUG: go directly to dashhboard
+  //const testUser = { id: 1, name: "repartidor_dev", role: 'driver' }; // Change rol to 'client' to test the client dashboard
+
+  //return <DriverDashboard user={testUser} onLogout={() => console.log('Logout')} />;
+  //const testUser = { id: 2, name: "client_dev", role: 'client' };
+  //return <ClientDashboard user={testUser} onLogout={() => console.log('Logout')} />;
+
+  const [user, setUser] = useState(null); // Store user data after login
   const [currentView, setCurrentView] = useState('login'); // 'login', 'register', 'client-dashboard'
 
   // Función que se ejecuta cuando el login es exitoso
