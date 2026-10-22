@@ -1,81 +1,14 @@
-/* --- Media Queries para Responsividad --- */
-
-/* Pantallas medianas y tablets (menores a 1024px) */
-@media (max-width: 1024px) {
-  .brand-content h1 {
-    font-size: 2.4rem;
-  }
-  
-  .left-illustration {
-    width: 100%;
-    max-width: 450px; /* Ampliamos el ancho máximo para que cubra bien los lados */
-    height: auto;
-    display: block;
-    margin-top: auto; /* Empuja la imagen completamente hacia la parte inferior */
-    object-fit: contain;
-  }
-}
-
-/* Dispositivos móviles y tablets pequeñas (menores a 768px) */
-@media (max-width: 768px) {
-  /* Ocultamos el panel izquierdo con la ilustración para dar todo el espacio al formulario */
-  .login-left-panel {
-    flex: 1.2;
-    background-color: #2b3e50;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Separa el texto arriba y la imagen abajo */
-    align-items: center;
-    padding: 40px 40px 0 40px; /* Quitamos el padding inferior para que la imagen toque el borde si se desea */
-    position: relative;
-    overflow: hidden;
-}
-  .login-right-panel {
-    width: 100%;
-    padding: 20px;
-    background-color: #ffffff;
-  }
-
-  .form-card {
-    max-width: 100%;
-    padding: 20px;
-  }
-
-  .form-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-}
-
-/* src/views/Login.css */
-/* src/views/Login.css */
-
-/* Limpiamos la configuración global para que la app mande en la pantalla */
-html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  overflow-x: hidden;
-}
-
-#root {
-  width: 100%;
-  height: 100%;
-}
+/* src/views/Login.css (shared by Login and Register) */
 
 .login-container {
   display: flex;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
   min-height: 100vh;
 }
 
-/* Panel Izquierdo */
+/* Left panel */
 .login-left-panel {
-  flex: 1.2; /* Le da un poco más de peso proporcional frente al formulario */
+  flex: 1.2;
   background-color: #2b3e50;
   color: white;
   display: flex;
@@ -83,7 +16,6 @@ html, body {
   justify-content: center;
   align-items: center;
   padding: 40px;
-  box-sizing: border-box;
 }
 
 .brand-content {
@@ -98,7 +30,8 @@ html, body {
   font-size: 2.8rem;
   font-weight: 800;
   line-height: 1.2;
-  margin-top: 20px;
+  margin: 20px 0 0;
+  color: white;
 }
 
 .left-illustration {
@@ -109,7 +42,7 @@ html, body {
   object-fit: contain;
 }
 
-/* Panel Derecho */
+/* Right panel */
 .login-right-panel {
   flex: 1;
   background-color: #ffffff;
@@ -117,7 +50,6 @@ html, body {
   justify-content: center;
   align-items: center;
   padding: 40px;
-  box-sizing: border-box;
 }
 
 .form-card {
@@ -125,26 +57,26 @@ html, body {
   max-width: 380px;
 }
 
-
 .form-card h2 {
   font-size: 1.8rem;
   color: #1a1a1a;
-  margin-bottom: 30px;
+  margin: 0 0 30px;
 }
 
-.input-group {
+/* Scoped so these don't clash with the dashboard modal's .input-group */
+.login-container .input-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
 }
 
-.input-group label {
+.login-container .input-group label {
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 8px;
 }
 
-.input-group input {
+.login-container .input-group input {
   border: none;
   border-bottom: 1px solid #ccc;
   padding: 8px 0;
@@ -153,11 +85,11 @@ html, body {
   transition: border-color 0.2s;
 }
 
-.input-group input:focus {
+.login-container .input-group input:focus {
   border-bottom-color: #1d4ed8;
 }
 
-/* Selector de roles interactivo */
+/* Role selector */
 .role-selector {
   display: flex;
   gap: 10px;
@@ -181,10 +113,10 @@ html, body {
   background: #ffffff;
   border-color: #1d4ed8;
   color: #1d4ed8;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Botón principal */
+/* Primary button */
 .submit-btn {
   width: 100%;
   padding: 12px;
@@ -199,14 +131,25 @@ html, body {
   margin-top: 10px;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background-color: #1e40af;
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .error-message {
   color: #dc2626;
   font-size: 0.9rem;
-  margin-bottom: 15px;
+  margin: 0 0 15px;
+}
+
+.success-message {
+  color: #16a34a;
+  font-size: 0.9rem;
+  margin: 0 0 15px;
 }
 
 .register-link {
@@ -229,9 +172,26 @@ html, body {
   color: #9ca3af;
 }
 
-/* Diseño responsivo para pantallas pequeñas */
+/* Tablets */
+@media (max-width: 1024px) {
+  .brand-content h1 {
+    font-size: 2.4rem;
+  }
+}
+
+/* Phones: hide the illustration panel and give the form the whole screen */
 @media (max-width: 768px) {
   .login-left-panel {
     display: none;
+  }
+
+  .login-right-panel {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .form-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
   }
 }

@@ -31,7 +31,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
       <div className="login-left-panel">
         <div className="brand-content">
           <h1>Mandaditos<br />Comunitarios</h1>
-          <img src="/scooter-illustration.png" alt="Mandaditos" className="left-illustration" />
+          <img src="/scooter-illustration.jpg" alt="Mandaditos" className="left-illustration" />
         </div>
       </div>
 

@@ -1,155 +1,85 @@
 // src/services/api.js
-// Usamos 127.0.0.1 por defecto para evitar problemas con la resolución de IPv6 (localhost) en Windows
-const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+// 127.0.0.1 avoids IPv6 (localhost) resolution problems on Windows.
+// Set VITE_API_URL in .env to switch between local and production.
+export const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
-// --- AUTENTICACIÓN ---
-
-export async function loginUser(credentials) {
-  const response = await fetch(`${API_URL}/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al iniciar sesión");
+// Turns whatever the backend returned into a readable message.
+// FastAPI validation errors (422) send `detail` as an array of objects.
+async function extractError(response, fallback) {
+  try {
+    const data = await response.json();
+    const detail = data?.detail;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+      return detail.map((d) => d.msg || JSON.stringify(d)).join(". ");
+    }
+  } catch {
+    // Response was not JSON (e.g. a 502 from the host while the server wakes up)
   }
+  return fallback;
+}
 
+async function request(path, options, fallbackError) {
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, options);
+  } catch {
+    throw new Error("No se pudo conectar con el servidor.");
+  }
+  if (!response.ok) {
+    throw new Error(await extractError(response, fallbackError));
+  }
   return response.json();
 }
 
-export async function registerUser(userData) {
-  const response = await fetch(`${API_URL}/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al registrarse");
-  }
-
-  return response.json();
+function jsonOptions(method, body) {
+  return {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  };
 }
 
-export async function googleLogin(googleData) {
-  const response = await fetch(`${API_URL}/google-login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(googleData),
-  });
+// --- AUTH ---
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error en inicio de sesión con Google");
-  }
-
-  return response.json();
+export function loginUser(credentials) {
+  return request("/login", jsonOptions("POST", credentials), "Error al iniciar sesión");
 }
 
-// --- GESTIÓN DE PEDIDOS ---
+export function registerUser(userData) {
+  return request("/register", jsonOptions("POST", userData), "Error al registrarse");
+}
 
-// 1. Obtener pedidos disponibles/pendientes para repartidores
+export function googleLogin(googleData) {
+  return request("/google-login", jsonOptions("POST", googleData), "Error en inicio de sesión con Google");
+}
+
+// --- ORDERS ---
+
 export async function getAvailableOrders() {
-  const response = await fetch(`${API_URL}/orders/available`);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al obtener pedidos disponibles");
-  }
-
-  const data = await response.json();
-  return data.orders || []; // Extrae el arreglo 'orders' del backend
+  const data = await request("/orders/available", undefined, "Error al obtener pedidos disponibles");
+  return data.orders || [];
 }
 
-// 2. Obtener pedidos asignados a un repartidor (o por estado)
 export async function getDriverOrders(driverId, status = null) {
-  const url = status 
-    ? `${API_URL}/orders/driver/${driverId}?status=${status}`
-    : `${API_URL}/orders/driver/${driverId}`;
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al obtener pedidos del repartidor");
-  }
-
-  const data = await response.json();
+  const query = status ? `?status=${encodeURIComponent(status)}` : "";
+  const data = await request(`/orders/driver/${driverId}${query}`, undefined, "Error al obtener pedidos del repartidor");
   return data.orders || [];
 }
 
-// 3. Obtener pedidos creados por un cliente
 export async function getClientOrders(clientId) {
-  const response = await fetch(`${API_URL}/orders/client/${clientId}`);
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al obtener pedidos del cliente");
-  }
-
-  const data = await response.json();
+  const data = await request(`/orders/client/${clientId}`, undefined, "Error al obtener pedidos del cliente");
   return data.orders || [];
 }
 
-// 4. Crear un nuevo pedido (Cliente)
-export async function createOrder(orderData) {
-  const response = await fetch(`${API_URL}/orders`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(orderData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al publicar el pedido");
-  }
-
-  return response.json();
+export function createOrder(orderData) {
+  return request("/orders", jsonOptions("POST", orderData), "Error al publicar el pedido");
 }
 
-// 5. Aceptar un pedido (Repartidor)
-export async function acceptOrder(orderId, driverId) {
-  const response = await fetch(`${API_URL}/orders/${orderId}/accept`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ driver_id: driverId }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "No se pudo aceptar el pedido");
-  }
-
-  return response.json();
+export function acceptOrder(orderId, driverId) {
+  return request(`/orders/${orderId}/accept`, jsonOptions("POST", { driver_id: driverId }), "No se pudo aceptar el pedido");
 }
 
-// 6. Actualizar el estado de un pedido (ejemplo: 'completed')
-export async function updateOrderStatus(orderId, status) {
-  const response = await fetch(`${API_URL}/orders/${orderId}/status`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ status }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.detail || "Error al actualizar estado del pedido");
-  }
-
-  return response.json();
+export function updateOrderStatus(orderId, status) {
+  return request(`/orders/${orderId}/status`, jsonOptions("PATCH", { status }), "Error al actualizar estado del pedido");
 }
