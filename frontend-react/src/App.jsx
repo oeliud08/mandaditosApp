@@ -5,34 +5,44 @@ import Register from './views/Register';
 import ClientDashboard from './views/ClientDashboard';
 import DriverDashboard from './views/DriverDashboard';
 
+const STORAGE_KEY = 'mandaditos_user';
 
+function loadStoredUser() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed && parsed.id && (parsed.role === 'client' || parsed.role === 'driver') ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function viewForUser(user) {
+  if (!user) return 'login';
+  return user.role === 'driver' ? 'driver-dashboard' : 'client-dashboard';
+}
 
 export default function App() {
-   // Test user for development purposes MODE DEBUG: go directly to dashhboard
-  //const testUser = { id: 1, name: "repartidor_dev", role: 'driver' }; // Change rol to 'client' to test the client dashboard
+  // Restore the session on refresh
+  const [user, setUser] = useState(loadStoredUser);
+  const [currentView, setCurrentView] = useState(() => viewForUser(loadStoredUser()));
 
-  //return <DriverDashboard user={testUser} onLogout={() => console.log('Logout')} />;
-  //const testUser = { id: 2, name: "client_dev", role: 'client' };
-  //return <ClientDashboard user={testUser} onLogout={() => console.log('Logout')} />;
-
-  const [user, setUser] = useState(null); // Store user data after login
-  const [currentView, setCurrentView] = useState('login'); // 'login', 'register', 'client-dashboard'
-
-  // Función que se ejecuta cuando el login es exitoso
   const handleLoginSuccess = (userData) => {
-    setUser(userData);
-    
-    // Verificamos el rol para redirigir a su vista correspondiente
-    if (userData.role === 'driver') {
-      setCurrentView('driver-dashboard'); //mandamos el login a su panel
-      
-    } else {
-      setCurrentView('client-dashboard');
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
+    } catch {
+      // Storage may be unavailable (private mode); the session just won't persist.
     }
+    setUser(userData);
+    setCurrentView(viewForUser(userData));
   };
 
-  // Función para cerrar sesión
   const handleLogout = () => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // ignore
+    }
     setUser(null);
     setCurrentView('login');
   };
@@ -40,30 +50,22 @@ export default function App() {
   return (
     <div>
       {currentView === 'login' && (
-        <Login 
+        <Login
           onLoginSuccess={handleLoginSuccess}
-          onSwitchToRegister={() => setCurrentView('register')} 
+          onSwitchToRegister={() => setCurrentView('register')}
         />
       )}
 
       {currentView === 'register' && (
-        <Register 
-          onSwitchToLogin={() => setCurrentView('login')} 
-        />
+        <Register onSwitchToLogin={() => setCurrentView('login')} />
       )}
 
       {currentView === 'client-dashboard' && (
-        <ClientDashboard 
-          user={user} 
-          onLogout={handleLogout} 
-        />
+        <ClientDashboard user={user} onLogout={handleLogout} />
       )}
 
       {currentView === 'driver-dashboard' && (
-        <DriverDashboard 
-          user={user} 
-          onLogout={handleLogout} 
-        />
+        <DriverDashboard user={user} onLogout={handleLogout} />
       )}
     </div>
   );
