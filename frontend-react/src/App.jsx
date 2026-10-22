@@ -4,18 +4,7 @@ import Login from './views/Login';
 import Register from './views/Register';
 import ClientDashboard from './views/ClientDashboard';
 import DriverDashboard from './views/DriverDashboard';
-
-const STORAGE_KEY = 'mandaditos_user';
-
-function loadStoredUser() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    return parsed && parsed.id && (parsed.role === 'client' || parsed.role === 'driver') ? parsed : null;
-  } catch {
-    return null;
-  }
-}
+import { getStoredUser, storeUser, clearStoredUser } from './services/api';
 
 function viewForUser(user) {
   if (!user) return 'login';
@@ -24,25 +13,17 @@ function viewForUser(user) {
 
 export default function App() {
   // Restore the session on refresh
-  const [user, setUser] = useState(loadStoredUser);
-  const [currentView, setCurrentView] = useState(() => viewForUser(loadStoredUser()));
+  const [user, setUser] = useState(getStoredUser);
+  const [currentView, setCurrentView] = useState(() => viewForUser(getStoredUser()));
 
   const handleLoginSuccess = (userData) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(userData));
-    } catch {
-      // Storage may be unavailable (private mode); the session just won't persist.
-    }
+    storeUser(userData); // includes the login token
     setUser(userData);
     setCurrentView(viewForUser(userData));
   };
 
   const handleLogout = () => {
-    try {
-      localStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // ignore
-    }
+    clearStoredUser();
     setUser(null);
     setCurrentView('login');
   };
