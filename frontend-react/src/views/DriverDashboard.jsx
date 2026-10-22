@@ -52,7 +52,7 @@ export default function DriverDashboard({ user, onLogout }) {
     if (busy) return;
     setBusy(true);
     try {
-      await acceptOrder(order.id, user.id);
+      await acceptOrder(order.id);
     } catch (error) {
       alert(error.message);
     } finally {

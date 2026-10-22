@@ -86,7 +86,6 @@ export default function ClientDashboard({ user, onLogout }) {
         description: description.trim(),
         comments: comments.trim(),
         reward: rewardNumber,
-        client_id: user.id,
       });
       resetForm();
       setShowNewOrderModal(false);

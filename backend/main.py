@@ -1,13 +1,15 @@
 import base64
 import hashlib
 import hmac
+import json
 import os
 import secrets
 import sqlite3
+import time
 from contextlib import contextmanager
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -97,6 +99,82 @@ def is_hashed(stored: Optional[str]) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Login tokens (HS256 JWT built with the standard library, no extra dependency)
+#
+# Set SECRET_KEY as an environment variable in production (e.g. on Render).
+# If it is missing a random key is generated at startup: everything still works,
+# but all users are logged out whenever the server restarts.
+# ---------------------------------------------------------------------------
+SECRET_KEY = os.environ.get("SECRET_KEY") or secrets.token_urlsafe(48)
+if not os.environ.get("SECRET_KEY"):
+    print("WARNING: SECRET_KEY is not set; using a temporary key. Sessions reset on restart.")
+
+TOKEN_TTL_SECONDS = 7 * 24 * 3600  # 7 days
+
+
+def _b64url(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode()
+
+
+def _b64url_decode(text: str) -> bytes:
+    return base64.urlsafe_b64decode(text + "=" * (-len(text) % 4))
+
+
+def _sign(signing_input: str) -> str:
+    return _b64url(hmac.new(SECRET_KEY.encode(), signing_input.encode(), hashlib.sha256).digest())
+
+
+def create_token(user_id: int, role: str) -> str:
+    header = _b64url(json.dumps({"alg": "HS256", "typ": "JWT"}, separators=(",", ":")).encode())
+    payload = _b64url(
+        json.dumps(
+            {"sub": user_id, "role": role, "exp": int(time.time()) + TOKEN_TTL_SECONDS},
+            separators=(",", ":"),
+        ).encode()
+    )
+    signing_input = f"{header}.{payload}"
+    return f"{signing_input}.{_sign(signing_input)}"
+
+
+def decode_token(token: str) -> Optional[dict]:
+    """Return {"id", "role"} for a valid, unexpired token, otherwise None."""
+    try:
+        header_b64, payload_b64, signature = token.split(".")
+        if not hmac.compare_digest(_sign(f"{header_b64}.{payload_b64}"), signature):
+            return None
+        header = json.loads(_b64url_decode(header_b64))
+        if header.get("alg") != "HS256":
+            return None
+        payload = json.loads(_b64url_decode(payload_b64))
+        if payload["exp"] < time.time():
+            return None
+        return {"id": int(payload["sub"]), "role": payload["role"]}
+    except Exception:
+        return None
+
+
+def current_user(authorization: Optional[str] = Header(None)) -> dict:
+    """FastAPI dependency: the logged-in user, or 401."""
+    if not authorization or not authorization.lower().startswith("bearer "):
+        raise HTTPException(status_code=401, detail="Inicia sesión para continuar.")
+    user = decode_token(authorization[7:].strip())
+    if not user:
+        raise HTTPException(status_code=401, detail="Tu sesión expiró. Inicia sesión de nuevo.")
+    return user
+
+
+def require_role(user: dict, role: str):
+    if user["role"] != role:
+        raise HTTPException(status_code=403, detail="No tienes permiso para esta acción.")
+
+
+def require_same_user(user: dict, user_id: int, role: str):
+    require_role(user, role)
+    if user["id"] != user_id:
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver estos pedidos.")
+
+
+# ---------------------------------------------------------------------------
 # DB initialization
 # ---------------------------------------------------------------------------
 def init_db():
@@ -165,10 +243,6 @@ class GoogleAuth(BaseModel):
     role: str = "client"
 
 
-class AcceptOrderRequest(BaseModel):
-    driver_id: int
-
-
 class UpdateStatusRequest(BaseModel):
     status: str
 
@@ -223,7 +297,13 @@ def login(data: UserLogin):
     if user[3] != data.role:
         raise HTTPException(status_code=400, detail=f"Esta cuenta no está registrada como {data.role}.")
 
-    return {"status": "success", "id": user[0], "username": user[1], "role": user[3]}
+    return {
+        "status": "success",
+        "id": user[0],
+        "username": user[1],
+        "role": user[3],
+        "token": create_token(user[0], user[3]),
+    }
 
 
 @app.post("/google-login")
@@ -253,7 +333,13 @@ def google_login(data: GoogleAuth):
             )
             user_id, username, role = cursor.lastrowid, data.username, data.role
 
-    return {"status": "success", "id": user_id, "username": username, "role": role}
+    return {
+        "status": "success",
+        "id": user_id,
+        "username": username,
+        "role": role,
+        "token": create_token(user_id, role),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -301,12 +387,9 @@ def _require_text(value, field):
 
 @app.post("/orders")
 @app.post("/orders/")
-def create_order(order_data: dict):
-    raw_client_id = order_data.get("client_id") or order_data.get("clientID")
-    try:
-        client_id = int(raw_client_id)
-    except (TypeError, ValueError):
-        raise HTTPException(status_code=400, detail="Falta el cliente que crea el pedido.")
+def create_order(order_data: dict, user: dict = Depends(current_user)):
+    require_role(user, "client")
+    client_id = user["id"]  # always the logged-in client, never taken from the request body
 
     description = _require_text(order_data.get("description"), "descripción")
     pickup_location = _require_text(
@@ -339,7 +422,8 @@ def create_order(order_data: dict):
 
 
 @app.get("/orders/client/{client_id}")
-def get_client_orders(client_id: int):
+def get_client_orders(client_id: int, user: dict = Depends(current_user)):
+    require_same_user(user, client_id, "client")
     with get_conn() as conn:
         rows = conn.execute(ORDER_SELECT + " WHERE o.client_id = ? ORDER BY o.id DESC", (client_id,)).fetchall()
 
@@ -348,7 +432,8 @@ def get_client_orders(client_id: int):
 
 @app.get("/orders/pending")
 @app.get("/orders/available")
-def get_available_orders():
+def get_available_orders(user: dict = Depends(current_user)):
+    require_role(user, "driver")
     with get_conn() as conn:
         rows = conn.execute(ORDER_SELECT + " WHERE o.status = 'pending' ORDER BY o.id DESC").fetchall()
 
@@ -356,16 +441,14 @@ def get_available_orders():
 
 
 @app.post("/orders/{order_id}/accept")
-def accept_order(order_id: int, data: AcceptOrderRequest):
-    with get_conn() as conn:
-        driver = conn.execute("SELECT role FROM users WHERE id = ?", (data.driver_id,)).fetchone()
-        if not driver or driver[0] != "driver":
-            raise HTTPException(status_code=400, detail="Repartidor no válido.")
+def accept_order(order_id: int, user: dict = Depends(current_user)):
+    require_role(user, "driver")
 
+    with get_conn() as conn:
         # Single atomic statement: only one driver can win the race.
         cursor = conn.execute(
             "UPDATE orders SET status = 'assigned', driver_id = ? WHERE id = ? AND status = 'pending'",
-            (data.driver_id, order_id),
+            (user["id"], order_id),
         )
         if cursor.rowcount == 0:
             exists = conn.execute("SELECT 1 FROM orders WHERE id = ?", (order_id,)).fetchone()
@@ -377,22 +460,31 @@ def accept_order(order_id: int, data: AcceptOrderRequest):
 
 
 @app.patch("/orders/{order_id}/status")
-def update_order_status(order_id: int, payload: UpdateStatusRequest):
-    if payload.status not in VALID_STATUSES:
+def update_order_status(order_id: int, payload: UpdateStatusRequest, user: dict = Depends(current_user)):
+    require_role(user, "driver")
+    if payload.status != "completed":
         raise HTTPException(status_code=400, detail="Estado inválido.")
 
     with get_conn() as conn:
+        # Only the driver who accepted the order can complete it, and only once.
         cursor = conn.execute(
-            "UPDATE orders SET status = ? WHERE id = ?", (payload.status, order_id)
+            "UPDATE orders SET status = 'completed' WHERE id = ? AND driver_id = ? AND status = 'assigned'",
+            (order_id, user["id"]),
         )
         if cursor.rowcount == 0:
-            raise HTTPException(status_code=404, detail="El pedido no existe.")
+            row = conn.execute("SELECT driver_id FROM orders WHERE id = ?", (order_id,)).fetchone()
+            if not row:
+                raise HTTPException(status_code=404, detail="El pedido no existe.")
+            if row[0] != user["id"]:
+                raise HTTPException(status_code=403, detail="Este pedido no es tuyo.")
+            raise HTTPException(status_code=400, detail="El pedido no está en curso.")
 
     return {"status": "success", "message": f"El pedido {order_id} ahora está: {payload.status}"}
 
 
 @app.get("/orders/driver/{driver_id}")
-def get_driver_orders(driver_id: int, status: Optional[str] = None):
+def get_driver_orders(driver_id: int, status: Optional[str] = None, user: dict = Depends(current_user)):
+    require_same_user(user, driver_id, "driver")
     query = ORDER_SELECT + " WHERE o.driver_id = ?"
     params = [driver_id]
     if status:
