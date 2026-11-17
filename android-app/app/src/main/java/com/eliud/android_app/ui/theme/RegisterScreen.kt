@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import com.eliud.android_app.data.RegisterRequest
 import com.eliud.android_app.data.RetrofitClient
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.background
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun RegisterScreen (onBackToLogin: () -> Unit) {
@@ -39,11 +42,21 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(RiderBackground)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "Create Account")
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "RiderLink MX",
+            color = RiderEmerald,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "Conecta clientes y repas, sin comisiones",
+            color = RiderTextGrey,
+            fontSize = 14.sp
+        )
 
         OutlinedTextField(
             value = username,

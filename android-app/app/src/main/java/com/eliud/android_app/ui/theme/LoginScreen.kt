@@ -26,8 +26,9 @@ import androidx.compose.foundation.layout.Row
 import com.eliud.android_app.data.LoginResponse
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.OutlinedButton
-
-
+import androidx.compose.foundation.background
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 fun LoginScreen(onGoToRegister: () -> Unit) {
@@ -42,11 +43,22 @@ fun LoginScreen(onGoToRegister: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(RiderBackground)
             .padding(24.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = "RiderLink MX")
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "RiderLink MX",
+            color = RiderEmerald,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "Conecta clientes y repas, sin comisiones",
+            color = RiderTextGrey,
+            fontSize = 14.sp
+        )
+
 
         OutlinedTextField(
             value = email,
@@ -100,7 +112,7 @@ fun LoginScreen(onGoToRegister: () -> Unit) {
             Text("Login")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(text = message)
         TextButton(onClick = onGoToRegister) {
             Text("Don't have an account? Register")
