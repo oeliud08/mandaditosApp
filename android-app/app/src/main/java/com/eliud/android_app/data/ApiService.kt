@@ -9,7 +9,7 @@ interface ApiService {
     suspend fun register(@Body request: RegisterRequest): User
 
     @POST("login")
-    suspend fun login(@Body request: LoginRequest): User
+    suspend fun login(@Body request: LoginRequest): LoginResponse
 
     @GET("orders/pending")
     suspend fun getPendingOrders(): OrdersResponse

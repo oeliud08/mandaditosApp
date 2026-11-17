@@ -17,6 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.eliud.android_app.data.RetrofitClient
 import com.eliud.android_app.ui.theme.AndroidappTheme
+import com.eliud.android_app.ui.theme.LoginScreen
+import com.eliud.android_app.ui.theme.RegisterScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,32 +26,19 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidappTheme {
-                var resultText by remember { mutableStateOf("Loading orders...") }
+                setContent {
+                    AndroidappTheme {
+                        var showRegister by remember { mutableStateOf(false) }
 
-                LaunchedEffect(Unit) {
-                    try {
-                        val response = RetrofitClient.api.getPendingOrders()
-                        resultText = "Connected! Pending orders: ${response.orders.size}"
-                    } catch (e: Exception) {
-                        resultText = "Error: ${e.message}"
+                        if (showRegister) {
+                            RegisterScreen(onBackToLogin = { showRegister = false })
+                        } else {
+                            LoginScreen(onGoToRegister = { showRegister = true })
+                        }
                     }
                 }
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = resultText,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
