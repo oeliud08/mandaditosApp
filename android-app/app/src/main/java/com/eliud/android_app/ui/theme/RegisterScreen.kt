@@ -1,5 +1,6 @@
 package com.eliud.android_app.ui.theme
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,10 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -21,17 +23,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.eliud.android_app.data.RegisterRequest
 import com.eliud.android_app.data.RetrofitClient
 import kotlinx.coroutines.launch
-import androidx.compose.foundation.background
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+
+private val registerTextFieldColors
+    @Composable
+    get() = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = RiderEmerald,
+        unfocusedBorderColor = RiderTextGrey,
+        focusedLabelColor = RiderEmerald,
+        unfocusedLabelColor = RiderTextGrey,
+        focusedTextColor = RiderText,
+        unfocusedTextColor = RiderText,
+        cursorColor = RiderEmerald
+    )
 
 @Composable
-fun RegisterScreen (onBackToLogin: () -> Unit) {
+fun RegisterScreen(onBackToLogin: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -47,7 +61,7 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "RiderLink MX",
+            text = "Create Account",
             color = RiderEmerald,
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold
@@ -57,11 +71,13 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
             color = RiderTextGrey,
             fontSize = 14.sp
         )
+        Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
             label = { Text("Username") },
+            colors = registerTextFieldColors,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -70,6 +86,7 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
+            colors = registerTextFieldColors,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -79,21 +96,38 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
             onValueChange = { password = it },
             label = { Text("Password") },
             visualTransformation = PasswordVisualTransformation(),
+            colors = registerTextFieldColors,
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)){
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (role == "client") {
-                Button(onClick = { role = "client" }) { Text("Client") }
+                Button(
+                    onClick = { role = "client" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = RiderEmerald,
+                        contentColor = Color.Black
+                    )
+                ) { Text("Client") }
             } else {
-                OutlinedButton(onClick = { role = "client" }) { Text("Client") }
+                OutlinedButton(onClick = { role = "client" }) {
+                    Text("Client", color = RiderText)
+                }
             }
 
             if (role == "driver") {
-                Button(onClick = { role = "driver" }) { Text("Driver") }
+                Button(
+                    onClick = { role = "driver" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = RiderEmerald,
+                        contentColor = Color.Black
+                    )
+                ) { Text("Driver") }
             } else {
-                OutlinedButton(onClick = { role = "driver" }) { Text("Driver") }
+                OutlinedButton(onClick = { role = "driver" }) {
+                    Text("Driver", color = RiderText)
+                }
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -116,15 +150,19 @@ fun RegisterScreen (onBackToLogin: () -> Unit) {
                     }
                 }
             },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = RiderEmerald,
+                contentColor = Color.Black
+            ),
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Register")
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = message)
+        Text(text = message, color = RiderText)
         TextButton(onClick = onBackToLogin) {
-            Text("Already have an account? Login")
+            Text("Already have an account? Login", color = RiderAmber)
         }
     }
 }
