@@ -9,8 +9,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.eliud.android_app.data.RetrofitClient
 import com.eliud.android_app.ui.theme.AndroidappTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,9 +24,20 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidappTheme {
+                var resultText by remember { mutableStateOf("Loading orders...") }
+
+                LaunchedEffect(Unit) {
+                    try {
+                        val response = RetrofitClient.api.getPendingOrders()
+                        resultText = "Connected! Pending orders: ${response.orders.size}"
+                    } catch (e: Exception) {
+                        resultText = "Error: ${e.message}"
+                    }
+                }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = resultText,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -36,12 +52,4 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AndroidappTheme {
-        Greeting("Android")
-    }
 }
