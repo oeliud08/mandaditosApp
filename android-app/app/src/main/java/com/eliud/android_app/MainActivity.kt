@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import com.eliud.android_app.ui.theme.AndroidappTheme
 import com.eliud.android_app.ui.theme.LoginScreen
 import com.eliud.android_app.ui.theme.RegisterScreen
+import com.eliud.android_app.ui.theme.DashboardScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AndroidappTheme {
+                /*
                 var showRegister by remember { mutableStateOf(false) }
 
                 if (showRegister) {
@@ -25,6 +27,8 @@ class MainActivity : ComponentActivity() {
                 } else {
                     LoginScreen(onGoToRegister = { showRegister = true })
                 }
+                 */
+                DashboardScreen()
             }
         }
     }
