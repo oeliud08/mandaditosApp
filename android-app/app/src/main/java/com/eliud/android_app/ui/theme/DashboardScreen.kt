@@ -1,6 +1,5 @@
 package com.eliud.android_app.ui.theme
 
-import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,104 +18,124 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.ui.text.font.Font
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.BorderStroke
 
-
+/* Request Card*/
 @Composable
-//Dashboard Screen for Rider
-fun DashboardScreen(){
-    Column( //Column
-        modifier = Modifier
-            .fillMaxSize()
-            .background(RiderBackground)
-            .padding(16.dp)
+fun RequestCard(
+    name: String,
+    info: String,
+    title: String,
+    description: String,
+    tags: String,
+    offer: String
+){
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = RiderSurface)
     ) {
-        Row( //Row
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(
-                text = "RiderLink MX",
-                color = RiderEmerald,
-                fontSize = 24.sp,
+                text = name,
+                color = RiderText,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+            Text(
+                text = info,
+                color = RiderTextGrey
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = title,
+                color = RiderAmber,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Modo Repa",
-                color = RiderEmerald
+                text = description,
+                color = RiderText
             )
-        }
-        Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = "CDMX & Metro",
-            color = RiderTextGrey
-        )
+            Text(
+                text = tags,
+                color = RiderTextGrey
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Ofrece / Presupuesto",
+                color = RiderTextGrey
+            )
+            Text(
+                text = offer,
+                color = RiderEmerald,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp
+            )
+            Spacer(modifier = Modifier.height(12.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ){
+                OutlinedButton(
+                    onClick = { /*TODO: Contraoferta*/ },
+                    modifier = Modifier.weight(1f),
+                    border = BorderStroke(1.dp, RiderEmerald)
+                ){
+                    Text(
+                        text = "Contraoferta",
+                        color = RiderEmerald
+                    )
 
-        Text(
-            text = "MURO DE SOLICITUDES",
-            color = RiderEmerald,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = "Clientes buscando repartidores cercanos.",
-            color = RiderText
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        //Card creation
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                    containerColor = RiderSurface)
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = "Tacos 'El Guero' since 1990",
-                    color = RiderText,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
-                Text(
-                    text = "Negocio Local • ★ 4.9 (38)",
-                    color = RiderTextGrey
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "Se buscan 2 repartidores fijos para turnos por la tarde",
-                    color = RiderAmber,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "Necesitamos entregas continuas de 14:00 a 19:00. Pagos inmediatos en efectivo",
-                    color = RiderText
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "$$ Pago inmediato",
-                    color = RiderTextGrey
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Ofrece / Presupuesto",
-                    color = RiderTextGrey
-                )
-                Text(
-                    text = "$90 - $120 por pedido",
-                    color = RiderEmerald,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
-                )
+                }
+                Button(
+                    onClick = {/*TODO: Postularme */},
+                    modifier = Modifier.weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = RiderEmerald
+                    )
+                ) {
+                    Text(
+                        text = "Postularme",
+                        color = RiderBackground,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
 }
+@Composable
+//Dashboard Screen for Rider
+fun DashboardScreen(){
+    RequestCard(
+        name = "Tacos 'El Guero' since 1990",
+        info = "Negocio Local • ★ 4.9 (38)",
+        title = "Se buscan 2 repartidores fijos para turnos por la tarde",
+        description = "Necesitamos entregas continuas de 14:00 a 19:00. Pagos inmediatos en efectivo",
+        tags = "# Pago Inmediato  # Cliente Frecuente  # Zona Segura",
+        offer = "$90 - $120 por pedido"
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    RequestCard(
+        name = "Dra. Sofía Morales",
+        info = "Cliente Particular • ★ 5.0 (14)",
+        title = "Envío urgente de muestra médica a laboratorio",
+        description = "Muestra delicada, entrega urgente en menos de 1 hora. Pago inmediato.",
+        tags = "# Urgente  # Cliente Frecuente  # Zona Segura",
+        offer = "$150 por envío"
+    )
+
+}
+
