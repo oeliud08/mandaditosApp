@@ -1,5 +1,6 @@
 package com.eliud.android_app.ui.theme
-import android.widget.Space
+
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.text.font.Font
 
 
 @Composable
@@ -78,7 +80,7 @@ fun DashboardScreen(){
             ) {
                 Text(
                     text = "Tacos 'El Guero' since 1990",
-                    color = RiderTextGrey,
+                    color = RiderText,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
@@ -86,7 +88,34 @@ fun DashboardScreen(){
                     text = "Negocio Local • ★ 4.9 (38)",
                     color = RiderTextGrey
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Se buscan 2 repartidores fijos para turnos por la tarde",
+                    color = RiderAmber,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Necesitamos entregas continuas de 14:00 a 19:00. Pagos inmediatos en efectivo",
+                    color = RiderText
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "$$ Pago inmediato",
+                    color = RiderTextGrey
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Ofrece / Presupuesto",
+                    color = RiderTextGrey
+                )
+                Text(
+                    text = "$90 - $120 por pedido",
+                    color = RiderEmerald,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp
+                )
             }
         }
     }
