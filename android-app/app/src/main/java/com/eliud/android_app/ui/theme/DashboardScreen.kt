@@ -117,25 +117,71 @@ fun RequestCard(
 @Composable
 //Dashboard Screen for Rider
 fun DashboardScreen(){
-    RequestCard(
-        name = "Tacos 'El Guero' since 1990",
-        info = "Negocio Local • ★ 4.9 (38)",
-        title = "Se buscan 2 repartidores fijos para turnos por la tarde",
-        description = "Necesitamos entregas continuas de 14:00 a 19:00. Pagos inmediatos en efectivo",
-        tags = "# Pago Inmediato  # Cliente Frecuente  # Zona Segura",
-        offer = "$90 - $120 por pedido"
-    )
+    Column( //Column
+        modifier = Modifier
+            .fillMaxSize()
+            .background(RiderBackground)
+            .padding(16.dp)
+    ) {
+        Row( //Row
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "RiderLink MX",
+                color = RiderEmerald,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Modo Repa",
+                color = RiderEmerald
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
 
-    Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "CDMX & Metro",
+            color = RiderTextGrey
+        )
 
-    RequestCard(
-        name = "Dra. Sofía Morales",
-        info = "Cliente Particular • ★ 5.0 (14)",
-        title = "Envío urgente de muestra médica a laboratorio",
-        description = "Muestra delicada, entrega urgente en menos de 1 hora. Pago inmediato.",
-        tags = "# Urgente  # Cliente Frecuente  # Zona Segura",
-        offer = "$150 por envío"
-    )
+        Spacer(modifier = Modifier.height(20.dp))
 
+        Text(
+            text = "MURO DE SOLICITUDES",
+            color = RiderEmerald,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Text(
+            text = "Clientes buscando repartidores cercanos.",
+            color = RiderText
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        //Card creation
+        RequestCard(
+            name = "Tacos 'El Guero' since 1990",
+            info = "Negocio Local • ★ 4.9 (38)",
+            title = "Se buscan 2 repartidores fijos para turnos por la tarde",
+            description = "Necesitamos entregas continuas de 14:00 a 19:00. Pagos inmediatos en efectivo",
+            tags = "# Pago Inmediato  # Cliente Frecuente  # Zona Segura",
+            offer = "$90 - $120 por pedido"
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        RequestCard(
+            name = "Dra. Sofía Morales",
+            info = "Cliente Particular • ★ 5.0 (14)",
+            title = "Envío urgente de muestra médica a laboratorio",
+            description = "Muestra delicada, entrega urgente en menos de 1 hora. Pago inmediato.",
+            tags = "# Urgente  # Cliente Frecuente  # Zona Segura",
+            offer = "$150 por envío"
+        )
+
+    }
 }
 
