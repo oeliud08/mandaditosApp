@@ -28,14 +28,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
 
   return (
     <div className="login-container">
-      <div className="login-left-panel">
-        <div className="brand-content">
-          <h1>Mandaditos<br />Comunitarios</h1>
-          <img src="/scooter-illustration.jpg" alt="Mandaditos" className="left-illustration" />
-        </div>
-      </div>
-
-      <div className="login-right-panel">
+      <div className="login-panel">
         <div className="form-card">
           <h2>Iniciar Sesión</h2>
           {error && <p className="error-message">{error}</p>}
