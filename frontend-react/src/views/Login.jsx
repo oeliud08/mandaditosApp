@@ -41,8 +41,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
               <button 
                 type="button" 
                 className={`role-btn ${role === 'driver' ? 'active' : ''}`}
-                //onClick={() => setRole('driver')}
-                onClick={() => { console.log('clicked Repa'); setRole('driver'); }}
+                onClick={() => setRole('driver')}
               >
                 🛵 Repa
               </button>
