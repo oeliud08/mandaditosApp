@@ -129,8 +129,21 @@
 .role-btn {
   position: relative;
   z-index: 1;
+  flex: 1;
+  padding: 12px 10px;
+  border: none;
   background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
   color: #CBD5E1;
+  transition: color 0.2s ease;
+}
+
+.role-btn.active {
+  background: transparent;
+  color: #0F172A;
 }
 
 .role-btn.active {
