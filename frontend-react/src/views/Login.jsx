@@ -31,31 +31,11 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
       <div className="login-panel">
         <div className="form-card">
           <h1>🛵</h1>
-          <h2>RiderLink MX</h2>
-          <p>La red de mandaditos de tu colonia: sin comisiones, trato directo y pago directo.</p>
+          <h2>Rider<span style={{color: "#10B981"}}>Link</span> <span style={{color: "#F59E0B"}}>MX</span></h2>
+          <p className="tagline">La red de mandaditos de tu colonia: sin comisiones, trato directo y pago directo.</p>
           {error && <p className="error-message">{error}</p>}
 
-          <form onSubmit={handleSubmit}>
-            <div className="input-group">
-              <label>Correo Electrónico</label>
-              <input 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
-              />
-            </div>
-
-            <div className="input-group">
-              <label>Contraseña</label>
-              <input 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
-              />
-            </div>
-
+          <div className="dark-box">
             <div className="role-selector">
               <button 
                 type="button" 
@@ -71,6 +51,32 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
               >
                 🛵 Repartidor
               </button>
+          </div>
+          </div> 
+
+          <p className="role-note">Cada cuenta tiene un solo rol: entra con el rol con el que te registraste.</p>
+
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label>Correo Electrónico</label>
+              <input 
+                placeholder="tucorreo@ejemplo.com"
+                type="email" 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                required 
+              />
+            </div>
+
+            <div className="input-group">
+              <label>Contraseña</label>
+              <input 
+                placeholder="Tu contraseña"
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                required 
+              />
             </div>
 
             <button type="submit" className="submit-btn" disabled={loading}>
@@ -84,7 +90,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
           </p>
 
           <div className="powered-by">
-            <span>⚡ Powered by Netlify</span>
+            <span>Si el servidor tarda en responder, está despertando: en Render se duerme tras un rato sin uso. Dale unos segundos y reintenta.</span>
           </div>
         </div>
       </div>

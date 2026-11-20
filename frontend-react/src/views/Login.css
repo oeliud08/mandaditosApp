@@ -46,7 +46,7 @@
   font-weight: 500;
 }
 
-.form-card p{
+.tagline{
   font-size: 0.9rem;
   color: #CBD5E1;
   margin: 0 0 30px;
@@ -54,16 +54,19 @@
 }
 
 /* Scoped so these don't clash with the dashboard modal's .input-group */
+
 .login-container .input-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  
 }
 
 .login-container .input-group label {
   font-size: 0.9rem;
   color: #CBD5E1;
   margin-bottom: 8px;
+  
 }
 
 .login-container .input-group input {
@@ -75,6 +78,10 @@
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  background: #0F172A;
+  padding: 12px 14px;
 }
 
 .login-container .input-group input:focus {
@@ -82,6 +89,9 @@
 }
 
 /* Role selector */
+.dark-box{
+
+}
 .role-selector {
   display: flex;
   gap: 10px;
@@ -171,19 +181,3 @@
   }
 }
 
-/* Phones: hide the illustration panel and give the form the whole screen */
-@media (max-width: 768px) {
-  .login-left-panel {
-    display: none;
-  }
-
-  .login-right-panel {
-    width: 100%;
-    padding: 20px;
-  }
-
-  .form-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-  }
-}
