@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { getClientOrders, createOrder } from "../services/api";
 import "./ClientDashboard.css";
+import "../../src/views/Login.css";
 
 const POLL_MS = 4000;
 
@@ -11,13 +12,32 @@ const STATUS_LABELS = {
 };
 
 const formatStatus = (status) => STATUS_LABELS[status] || STATUS_LABELS.pending;
-
+const sampleOrders = [
+  {
+    id: 1,
+    description: "2 tacos al pastor y un refresco",
+    pickup_location: "Tacos 'El Guero'",
+    delivery_location: "Calle Real Castilla 123",
+    reward: 90,
+    status: "pending",
+    client: "Dra. Sofía Morales",
+  },
+  {
+    id: 2,
+    description: "Medicinas de la farmacia",
+    pickup_location: "Farmacia San Pablo",
+    delivery_location: "Av. Hidalgo 45",
+    reward: 120,
+    status: "assigned",
+    client: "Dra. Sofía Morales",
+  },
+];
 const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 export default function ClientDashboard({ user, onLogout }) {
   //const [orders, setOrders] = useState([]); TODO Connect DB Step 5
   const [orders, setOrders] = useState(sampleOrders);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); //Example without backend for now
   const [loadError, setLoadError] = useState("");
 
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
@@ -110,32 +130,11 @@ export default function ClientDashboard({ user, onLogout }) {
     );
   }
 
-  const sampleOrders = [
-    {
-      id: 1,
-      description: "2 tacos al pastor y un refresco",
-      pickup_location: "Tacos 'El Guero'",
-      delivery_location: "Calle Real Castilla 123",
-      reward: 90,
-      status: "pending",
-      client: "Dra. Sofía Morales",
-    },
-    {
-      id: 2,
-      description: "Medicinas de la farmacia",
-      pickup_location: "Farmacia San Pablo",
-      delivery_location: "Av. Hidalgo 45",
-      reward: 120,
-      status: "assigned",
-      client: "Dra. Sofía Morales",
-    },
-  ];
-
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container phone-frame">
       <header className="dashboard-header">
         <div className="header-brand">
-          <h2>
+          <h2 className="brand-title">
             Rider<span style={{ color: "#10B981" }}>Link</span>{" "}
             <span style={{ color: "#F59E0B" }}>MX</span>
           </h2>
