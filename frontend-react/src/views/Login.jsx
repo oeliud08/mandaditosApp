@@ -36,22 +36,24 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
           {error && <p className="error-message">{error}</p>}
 
           <div className="dark-box">
+            <div className={`role-slider ${role === 'driver' ? 'slider-repa' : 'slider-cliente'}`} />
             <div className="role-selector">
+              <button 
+                type="button" 
+                className={`role-btn ${role === 'driver' ? 'active' : ''}`}
+                //onClick={() => setRole('driver')}
+                onClick={() => { console.log('clicked Repa'); setRole('driver'); }}
+              >
+                🛵 Repa
+              </button>
               <button 
                 type="button" 
                 className={`role-btn ${role === 'client' ? 'active' : ''}`}
                 onClick={() => setRole('client')}
               >
-                👤 Cliente
+                🛍️ Cliente
               </button>
-              <button 
-                type="button" 
-                className={`role-btn ${role === 'driver' ? 'active' : ''}`}
-                onClick={() => setRole('driver')}
-              >
-                🛵 Repartidor
-              </button>
-          </div>
+            </div>
           </div> 
 
           <p className="role-note">Cada cuenta tiene un solo rol: entra con el rol con el que te registraste.</p>
