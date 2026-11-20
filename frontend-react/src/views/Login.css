@@ -9,45 +9,9 @@
   min-height: 100vh;
   background: #0F172A;
 }
-
-/* Left panel 
-.login-left-panel {
-  flex: 1.2;
-  background-color: #2b3e50;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-}
-
-
-.brand-content {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-*/
-.brand-content h1 {
-  font-size: 2.8rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin: 20px 0 0;
-  color: white;
-}
 /*
-.left-illustration {
-  width: 85%;
-  max-width: 420px;
-  height: auto;
-  margin-top: 10px;
-  object-fit: contain;
-}
-*/
-/* Right panel */
+
+/* Login panel */
 .login-panel {
   width: 100%;
   max-width: 400px;
@@ -65,9 +29,9 @@
   max-width: 380px;
 }
 
-.form-card h2 {
+.form-card h2{
   font-size: 1.8rem;
-  color: #1a1a1a;
+  color: #ffffff;
   margin: 0 0 30px;
 }
 
@@ -76,11 +40,14 @@
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
+  background: transparent; 
+  color: white; 
+  border-bottom-color: #475569
 }
 
 .login-container .input-group label {
   font-size: 0.9rem;
-  color: #666;
+  color: #CBD5E1;
   margin-bottom: 8px;
 }
 
@@ -108,7 +75,7 @@
   flex: 1;
   padding: 10px;
   border: 1px solid #ddd;
-  background: #f9fafb;
+  background: #0F172A;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.95rem;
@@ -128,7 +95,7 @@
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background-color: #1e3a8a;
+  background-color: #10B981;
   color: white;
   border: none;
   border-radius: 8px;

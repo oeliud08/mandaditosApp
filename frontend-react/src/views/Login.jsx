@@ -30,6 +30,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
     <div className="login-container">
       <div className="login-panel">
         <div className="form-card">
+          <h1 style={{ color: "#ffffff" }}>RiderLink MX</h1>
           <h2>Iniciar Sesión</h2>
           {error && <p className="error-message">{error}</p>}
 
