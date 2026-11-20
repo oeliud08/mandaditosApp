@@ -31,7 +31,7 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
       <div className="login-panel">
         <div className="form-card">
           <h1>🛵</h1>
-          <h2>Rider<span style={{color: "#10B981"}}>Link</span> <span style={{color: "#F59E0B"}}>MX</span></h2>
+          <h2 className="brand-title">Rider<span style={{color: "#10B981"}}>Link</span> <span style={{color: "#F59E0B"}}>MX</span></h2>
           <p className="tagline">La red de mandaditos de tu colonia: sin comisiones, trato directo y pago directo.</p>
           {error && <p className="error-message">{error}</p>}
 

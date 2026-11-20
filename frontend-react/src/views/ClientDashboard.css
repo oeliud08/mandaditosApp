@@ -7,9 +7,20 @@
   text-align: left;
 }
 
+.role-badge {
+  background: #0F172A;
+  border: 1px solid #10B981;
+  color: #10B981;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+
 /* Header */
 .dashboard-header {
-  background-color: #ffffff;
+  background-color: #0F172A;
   padding: 15px 40px;
   display: flex;
   justify-content: space-between;
