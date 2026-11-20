@@ -30,8 +30,9 @@ export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- A
     <div className="login-container">
       <div className="login-panel">
         <div className="form-card">
-          <h1 style={{ color: "#ffffff" }}>RiderLink MX</h1>
-          <h2>Iniciar Sesión</h2>
+          <h1>🛵</h1>
+          <h2>RiderLink MX</h2>
+          <p>La red de mandaditos de tu colonia: sin comisiones, trato directo y pago directo.</p>
           {error && <p className="error-message">{error}</p>}
 
           <form onSubmit={handleSubmit}>
