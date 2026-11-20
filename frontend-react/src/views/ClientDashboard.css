@@ -215,13 +215,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px;
+  padding: 20px;
   z-index: 1000;
 }
 
 .modal-card {
-  background: white;
-  padding: 30px;
+  background: #1E293B;
+  padding: 24px;
+  border: 1px solid #334155;
+  color: #ffffff;
   border-radius: 16px;
   width: 100%;
   max-width: 450px;
@@ -233,11 +235,14 @@
 .modal-card h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  color: #0f172a;
+  color: #ffffff;
 }
 
 /* Scoped so these don't clash with the login form's .input-group */
 .modal-card .input-group {
+  background: transparent;
+  border: none;
+  padding: 0;
   margin-bottom: 15px;
   display: flex;
   flex-direction: column;
@@ -245,22 +250,31 @@
 
 .modal-card .input-group label {
   font-size: 0.85rem;
-  color: #64748b;
+  color: #CBD5E1;
+  border: none;
   margin-bottom: 6px;
-  font-weight: 500;
+  font-weight: 600;
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  display: block;
 }
 
 .modal-card .input-group input {
-  border: 1px solid #cbd5e1;
-  padding: 10px;
-  border-radius: 8px;
+  background: #0F172A;
+  border: 1px solid #475569;
+  padding: 12px 14px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
   font-size: 0.95rem;
   outline: none;
   transition: border-color 0.2s;
+  color: #ffffff;
 }
 
 .modal-card .input-group input:focus {
-  border-color: #1d4ed8;
+  border-color: #64748B;
 }
 
 .modal-actions {
@@ -268,6 +282,14 @@
   justify-content: flex-end;
   gap: 10px;
   margin-top: 25px;
+}
+
+.modal-actions .primary-btn {
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  background: #10B981;
+  color: #0F172A;
+  font-weight: 700;
 }
 
 .secondary-btn {
@@ -279,7 +301,11 @@
   cursor: pointer;
   font-weight: 500;
 }
-
+.modal-actions .secondary-btn {
+  background: transparent;
+  color: #CBD5E1;
+  border: 1px solid #475569;
+}
 .secondary-btn:hover:not(:disabled) {
   background: #f1f5f9;
 }
