@@ -12,26 +12,33 @@ const STATUS_LABELS = {
 };
 
 const formatStatus = (status) => STATUS_LABELS[status] || STATUS_LABELS.pending;
+// Sample orders for testing without backend
 const sampleOrders = [
   {
     id: 1,
-    description: "2 tacos al pastor y un refresco",
-    pickup_location: "Tacos 'El Guero'",
-    delivery_location: "Calle Real Castilla 123",
-    reward: 90,
-    status: "pending",
-    client: "Dra. Sofía Morales",
+    description: "Despensa de Walmart",
+    repa: "Carlos M.",
+    repaRating: 4.9,
+    vehicle: "Moto FT125",
+    timeAgo: "Hace 10 min",
+    distance: "1.2 km",
+    reward: 65,
+    status: "assigned",
+    progress: 1,
   },
   {
     id: 2,
-    description: "Medicinas de la farmacia",
-    pickup_location: "Farmacia San Pablo",
-    delivery_location: "Av. Hidalgo 45",
-    reward: 120,
-    status: "assigned",
-    client: "Dra. Sofía Morales",
+    description: "Recoger un paquete",
+    repa: null,
+    applications: 3,
+    timeAgo: "Hace 25 min",
+    place: "Paquetería del centro",
+    reward: 50,
+    status: "pending",
   },
 ];
+
+
 const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 export default function ClientDashboard({ user, onLogout }) {
@@ -192,19 +199,14 @@ export default function ClientDashboard({ user, onLogout }) {
             + Pedir mandadito
           </button>
         </section>
-
-        {/* <div className="dashboard-action-bar">
-          <div className="section-title">
-            <h3>Mis Mandaditos</h3>
-            <p>Gestiona y rastrea tus pedidos en tiempo real.</p>
-          </div>
-          <button
-            className="primary-btn"
-            onClick={() => setShowNewOrderModal(true)}
-          >
-            + Pedir Mandadito
+        {/* Dashboard Action Bar */}
+        <div className="dashboard-action-bar">
+          <h3>Mis mandaditos</h3>
+          <button className="history-link" type="button">
+            Ver historial
           </button>
-        </div> */}
+        </div>
+
         {/* Home stats */}
         <section className="home-stats">
           <div className="home-stat">
@@ -224,41 +226,86 @@ export default function ClientDashboard({ user, onLogout }) {
         </section>
 
         {loadError && <p className="form-error">{loadError}</p>}
-
+        {/* Orders Map */}
         <div className="orders-grid">
-          {orders.length === 0 ? (
-            <p className="no-orders">No tienes mandaditos activos por ahora.</p>
-          ) : (
-            orders.map((order) => (
-              <div key={order.id} className="order-card">
-                <div className="order-header">
-                  <span className="order-id">#{order.id}</span>
-                  <span className="order-status">
-                    {formatStatus(order.status)}
-                  </span>
+          {orders.map((order) => (
+            <div key={order.id} className="order-card">
+              <div className="order-top">
+                <div className="order-avatar">
+                  {order.repa
+                    ? order.repa
+                        .split(" ")
+                        .map((w) => w.charAt(0))
+                        .join("")
+                    : "?"}
                 </div>
-                <div className="order-body">
-                  <p>
-                    <strong>Descripción:</strong> {order.description}
-                  </p>
-                  <p>
-                    <strong>Origen:</strong> {order.pickup_location}
-                  </p>
-                  <p>
-                    <strong>Destino:</strong> {order.delivery_location}
-                  </p>
-                  {order.comments && (
+                <div className="order-info">
+                  <h4>{order.description}</h4>
+                  {order.repa ? (
                     <p>
-                      <strong>Instrucciones:</strong> {order.comments}
+                      Repa: {order.repa} · ★ {order.repaRating} ·{" "}
+                      {order.vehicle}
+                    </p>
+                  ) : (
+                    <p>
+                      Sin repa todavía · {order.applications} repas se
+                      postularon
                     </p>
                   )}
                   <p>
-                    <strong>Ofrecido:</strong> {formatMoney(order.reward)}
+                    {order.timeAgo}
+                    {order.distance
+                      ? ` · ${order.distance}`
+                      : ` · ${order.place}`}
                   </p>
                 </div>
+                <div className="order-price">
+                  <span>${order.reward}</span>
+                  <small>oferta</small>
+                </div>
               </div>
-            ))
-          )}
+
+              <span className={`order-status ${order.status}`}>
+                {order.status === "assigned" ? "En curso" : "Pendiente"}
+              </span>
+
+              {order.status === "assigned" ? (
+                <>
+                  <div className="order-progress">
+                    {["Aceptado", "Comprando", "En camino", "Entregado"].map(
+                      (step, i) => (
+                        <div
+                          key={step}
+                          className={`progress-step ${i <= order.progress ? "done" : ""}`}
+                        >
+                          <span className="progress-dot" />
+                          {step}
+                        </div>
+                      ),
+                    )}
+                  </div>
+                  <div className="order-actions">
+                    <button className="whatsapp-btn" type="button">
+                      WhatsApp al repa
+                    </button>
+                    <button className="detail-btn" type="button">
+                      Ver detalle
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="order-note">
+                    Revisa las postulaciones y elige por calificación, no solo
+                    por precio.
+                  </p>
+                  <button className="applications-btn" type="button">
+                    Ver {order.applications} postulaciones
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </main>
 

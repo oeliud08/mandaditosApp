@@ -91,16 +91,27 @@
   background: #0F172A;
   color: #ffffff;
 }
-
+/* Dashboard Action Bar */
 .dashboard-action-bar {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
-
+.dashboard-action-bar h3{
+  color: #ffffff;
+  margin: 0;
+}
+.history-link{
+  background: transparent;
+  border: none;
+  color: #F59E0B;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
 .section-title h3 {
   font-size: 1.5rem;
   color: #ffffff;
@@ -419,3 +430,26 @@
   color: #94A3B8;
   font-size: 0.85rem;
 }
+
+/* Orders Map */
+.order-card { background: #1E293B; border: 1px solid #334155; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+.order-top { display: flex; gap: 12px; align-items: flex-start; }
+.order-avatar { width: 48px; height: 48px; flex-shrink: 0; border-radius: 12px; background: #10B981; color: #0F172A; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
+.order-info { flex: 1; }
+.order-info h4 { color: #ffffff; margin: 0 0 4px; }
+.order-info p { color: #94A3B8; margin: 0 0 2px; font-size: 0.9rem; }
+.order-price { text-align: right; color: #10B981; font-weight: 700; font-size: 1.2rem; }
+.order-price small { display: block; color: #94A3B8; font-size: 0.85rem; font-weight: 400; }
+.order-status { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; margin: 12px 0; }
+.order-status.assigned { background: #064E3B; color: #10B981; }
+.order-status.pending { background: #451A03; color: #F59E0B; }
+.order-progress { display: flex; justify-content: space-between; margin: 8px 0 16px; }
+.progress-step { display: flex; flex-direction: column; align-items: center; gap: 6px; color: #64748B; font-size: 0.85rem; }
+.progress-step.done { color: #ffffff; }
+.progress-dot { width: 12px; height: 12px; border-radius: 50%; background: #475569; }
+.progress-step.done .progress-dot { background: #10B981; }
+.order-actions { display: flex; gap: 10px; }
+.whatsapp-btn { flex: 1; background: transparent; border: 1px solid #10B981; color: #10B981; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer; }
+.detail-btn { flex: 1; background: transparent; border: 1px solid #475569; color: #ffffff; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer; }
+.order-note { color: #CBD5E1; margin: 12px 0; }
+.applications-btn { width: 100%; background: #10B981; color: #0F172A; border: none; border-radius: 12px; padding: 14px; font-weight: 700; cursor: pointer; }
