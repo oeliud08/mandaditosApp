@@ -314,6 +314,9 @@ export default function ClientDashboard({ user, onLogout }) {
                       Sin repa todavía. Cuando un repa se postule, lo verás
                       aquí.
                     </p>
+                    <button className="applications-btn" type="button">
+                      Ver postulaciones
+                    </button>
                     <div className="order-actions">
                       <button
                         className="edit-btn"
