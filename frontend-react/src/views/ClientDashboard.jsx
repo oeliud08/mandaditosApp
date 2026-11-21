@@ -96,6 +96,15 @@ export default function ClientDashboard({ user, onLogout }) {
     if (submitting) return;
     setShowNewOrderModal(false);
   };
+  const handleEdit = (order) => {
+    console.log("Editar pedido", order.id);
+    // TODO: abrir el modal con los datos del pedido — después del endpoint en Python
+  };
+
+  const handleDelete = (order) => {
+    console.log("Eliminar pedido", order.id);
+    // TODO: llamar a deleteOrder(order.id) — después del endpoint en Python
+  };
 
   const handleCreateOrder = async (e) => {
     e.preventDefault();
@@ -243,6 +252,10 @@ export default function ClientDashboard({ user, onLogout }) {
                   </div>
                   <div className="order-info">
                     <h4>{order.description}</h4>
+                    <p>Origen: {order.pickup_location}</p>
+                    <p>Destino: {order.delivery_location}</p>
+                    {order.comments && <p>{order.comments}</p>}
+
                     {order.repa ? (
                       <p>
                         Repa: {order.repa} · ★ {order.repaRating} ·{" "}
@@ -278,7 +291,7 @@ export default function ClientDashboard({ user, onLogout }) {
                         (step, i) => (
                           <div
                             key={step}
-                            className={`progress-step ${i <= order.progress ? "done" : ""}`}
+                            className={`progress-step ${i <= 0 ? "done" : ""}`}
                           >
                             <span className="progress-dot" />
                             {step}
@@ -298,12 +311,25 @@ export default function ClientDashboard({ user, onLogout }) {
                 ) : (
                   <>
                     <p className="order-note">
-                      Revisa las postulaciones y elige por calificación, no solo
-                      por precio.
+                      Sin repa todavía. Cuando un repa se postule, lo verás
+                      aquí.
                     </p>
-                    <button className="applications-btn" type="button">
-                      Ver {order.applications} postulaciones
-                    </button>
+                    <div className="order-actions">
+                      <button
+                        className="edit-btn"
+                        type="button"
+                        onClick={() => handleEdit(order)}
+                      >
+                        Editar
+                      </button>
+                      <button
+                        className="delete-btn"
+                        type="button"
+                        onClick={() => handleDelete(order)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </>
                 )}
               </div>

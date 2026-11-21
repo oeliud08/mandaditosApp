@@ -447,8 +447,42 @@
 .progress-step.done { color: #ffffff; }
 .progress-dot { width: 12px; height: 12px; border-radius: 50%; background: #475569; }
 .progress-step.done .progress-dot { background: #10B981; }
-.order-actions { display: flex; gap: 10px; }
+.order-actions { 
+  display: flex; 
+  gap: 10px; 
+  margin-top: 12px;
+}
+.order-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: transparent;
+}
 .whatsapp-btn { flex: 1; background: transparent; border: 1px solid #10B981; color: #10B981; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer; }
 .detail-btn { flex: 1; background: transparent; border: 1px solid #475569; color: #ffffff; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer; }
 .order-note { color: #CBD5E1; margin: 12px 0; }
 .applications-btn { width: 100%; background: #10B981; color: #0F172A; border: none; border-radius: 12px; padding: 14px; font-weight: 700; cursor: pointer; }
+
+/* Order Actions Buttons Delete and edit */
+
+
+.edit-btn {
+  border: 1px solid #F59E0B;
+  color: #F59E0B;
+}
+
+.edit-btn:hover {
+  background: #451A03;
+}
+
+.delete-btn {
+  border: 1px solid #EF4444;
+  color: #F87171;
+}
+
+.delete-btn:hover {
+  background: #450A0A;
+}
