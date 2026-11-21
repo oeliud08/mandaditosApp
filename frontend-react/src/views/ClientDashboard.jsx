@@ -39,7 +39,7 @@ export default function ClientDashboard({ user, onLogout }) {
   const [orders, setOrders] = useState(sampleOrders);
   const [loading, setLoading] = useState(false); //Example without backend for now
   const [loadError, setLoadError] = useState("");
-
+  const [search, setSearch] = useState("");
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState("");
@@ -149,9 +149,51 @@ export default function ClientDashboard({ user, onLogout }) {
           </button>
         </div>
       </header>
-
       <main className="dashboard-main">
-        <div className="dashboard-action-bar">
+        {/* Client home Top */}
+        <section className="client-home-top">
+          <div className="home-greeting-row">
+            <div>
+              <p className="home-location">📍 Real Castilla, Hidalgo</p>
+              <h2 className="home-hello">
+                Hola, {user?.username || "Cliente"}
+              </h2>
+              <p className="home-subtitle">
+                ¿Qué mandadito necesitas hoy? Un repa de tu colonia lo hace, sin
+                intermediarios.
+              </p>
+            </div>
+            <div className="home-avatar">
+              {(user?.username || "C").charAt(0).toUpperCase()}
+            </div>
+          </div>
+        </section>
+        {/* Buscador */}
+        <div className="home-search">
+          <span className="home-search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Buscar un repa, comida, farmacia..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        {/* Green Card */}
+        <section className="home-publish-card">
+          <h3>¿Necesitas un mandado?</h3>
+          <p>
+            Publícalo y los repas cercanos se postulan. Tú eliges a quién se lo
+            das.
+          </p>
+          <button
+            className="home-publish-btn"
+            onClick={() => setShowNewOrderModal(true)}
+          >
+            + Pedir mandadito
+          </button>
+        </section>
+
+        {/* <div className="dashboard-action-bar">
           <div className="section-title">
             <h3>Mis Mandaditos</h3>
             <p>Gestiona y rastrea tus pedidos en tiempo real.</p>
@@ -162,7 +204,24 @@ export default function ClientDashboard({ user, onLogout }) {
           >
             + Pedir Mandadito
           </button>
-        </div>
+        </div> */}
+        {/* Home stats */}
+        <section className="home-stats">
+          <div className="home-stat">
+            <span className="home-stat-number">
+              {orders.filter((o) => o.status !== "completed").length}
+            </span>
+            <span className="home-stat-label">Mandaditos activos</span>
+          </div>
+          <div className="home-stat">
+            <span className="home-stat-number">12</span>
+            <span className="home-stat-label">Completados</span>
+          </div>
+          <div className="home-stat">
+            <span className="home-stat-number">★ 4.9</span>
+            <span className="home-stat-label">Como cliente</span>
+          </div>
+        </section>
 
         {loadError && <p className="form-error">{loadError}</p>}
 

@@ -309,3 +309,113 @@
 .secondary-btn:hover:not(:disabled) {
   background: #f1f5f9;
 }
+
+/* Home Top */
+.client-home-top { margin-bottom: 20px; }
+.home-greeting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+.home-location { color: #94A3B8; margin: 0 0 8px; }
+.home-hello { color: #ffffff; font-size: 1.8rem; margin: 0 0 8px; }
+.home-subtitle { color: #CBD5E1; margin: 0; }
+.home-avatar {
+  width: 56px; height: 56px; flex-shrink: 0;
+  border-radius: 50%;
+  background: #10B981; color: #0F172A;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; font-weight: 700;
+}
+
+.home-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+
+.home-search-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.home-search input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.home-search input::placeholder {
+  color: #64748B;
+}
+
+/* Green Card */
+.home-publish-card {
+  background: #10B981;
+  color: #0F172A;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.home-publish-card h3 {
+  color: #0F172A;
+  font-size: 1.3rem;
+  margin: 0 0 8px;
+}
+
+.home-publish-card p {
+  color: #0F172A;
+  margin: 0 0 16px;
+}
+
+.home-publish-btn {
+  width: 100%;
+  background: #0F172A;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+/* Home Stats */
+.home-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.home-stat {
+  background: #1E293B;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 16px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.home-stat-number {
+  color: #ffffff;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.home-stat-label {
+  color: #94A3B8;
+  font-size: 0.85rem;
+}
