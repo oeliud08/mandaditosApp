@@ -13,38 +13,37 @@ const STATUS_LABELS = {
 
 const formatStatus = (status) => STATUS_LABELS[status] || STATUS_LABELS.pending;
 // Sample orders for testing without backend
-const sampleOrders = [
-  {
-    id: 1,
-    description: "Despensa de Walmart",
-    repa: "Carlos M.",
-    repaRating: 4.9,
-    vehicle: "Moto FT125",
-    timeAgo: "Hace 10 min",
-    distance: "1.2 km",
-    reward: 65,
-    status: "assigned",
-    progress: 1,
-  },
-  {
-    id: 2,
-    description: "Recoger un paquete",
-    repa: null,
-    applications: 3,
-    timeAgo: "Hace 25 min",
-    place: "Paquetería del centro",
-    reward: 50,
-    status: "pending",
-  },
-];
-
+// const sampleOrders = [
+//   {
+//     id: 1,
+//     description: "Despensa de Walmart",
+//     repa: "Carlos M.",
+//     repaRating: 4.9,
+//     vehicle: "Moto FT125",
+//     timeAgo: "Hace 10 min",
+//     distance: "1.2 km",
+//     reward: 65,
+//     status: "assigned",
+//     progress: 1,
+//   },
+//   {
+//     id: 2,
+//     description: "Recoger un paquete",
+//     repa: null,
+//     applications: 3,
+//     timeAgo: "Hace 25 min",
+//     place: "Paquetería del centro",
+//     reward: 50,
+//     status: "pending",
+//   },
+// ];
 
 const formatMoney = (value) => `$${Number(value || 0).toFixed(2)}`;
 
 export default function ClientDashboard({ user, onLogout }) {
   //const [orders, setOrders] = useState([]); TODO Connect DB Step 5
-  const [orders, setOrders] = useState(sampleOrders);
-  const [loading, setLoading] = useState(false); //Example without backend for now
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true); //Example without backend for now
   const [loadError, setLoadError] = useState("");
   const [search, setSearch] = useState("");
   const [showNewOrderModal, setShowNewOrderModal] = useState(false);
@@ -78,11 +77,11 @@ export default function ClientDashboard({ user, onLogout }) {
   }, [user?.id]);
 
   // Poll for updates / TODO Connect DB Step 5
-  // useEffect(() => {
-  //   fetchOrders();
-  //   const interval = setInterval(fetchOrders, POLL_MS);
-  //   return () => clearInterval(interval);
-  // }, [fetchOrders]);
+  useEffect(() => {
+    fetchOrders();
+    const interval = setInterval(fetchOrders, POLL_MS);
+    return () => clearInterval(interval);
+  }, [fetchOrders]);
 
   const resetForm = () => {
     setPickup("");
@@ -228,84 +227,88 @@ export default function ClientDashboard({ user, onLogout }) {
         {loadError && <p className="form-error">{loadError}</p>}
         {/* Orders Map */}
         <div className="orders-grid">
-          {orders.map((order) => (
-            <div key={order.id} className="order-card">
-              <div className="order-top">
-                <div className="order-avatar">
-                  {order.repa
-                    ? order.repa
-                        .split(" ")
-                        .map((w) => w.charAt(0))
-                        .join("")
-                    : "?"}
-                </div>
-                <div className="order-info">
-                  <h4>{order.description}</h4>
-                  {order.repa ? (
-                    <p>
-                      Repa: {order.repa} · ★ {order.repaRating} ·{" "}
-                      {order.vehicle}
-                    </p>
-                  ) : (
-                    <p>
-                      Sin repa todavía · {order.applications} repas se
-                      postularon
-                    </p>
-                  )}
-                  <p>
-                    {order.timeAgo}
-                    {order.distance
-                      ? ` · ${order.distance}`
-                      : ` · ${order.place}`}
-                  </p>
-                </div>
-                <div className="order-price">
-                  <span>${order.reward}</span>
-                  <small>oferta</small>
-                </div>
-              </div>
-
-              <span className={`order-status ${order.status}`}>
-                {order.status === "assigned" ? "En curso" : "Pendiente"}
-              </span>
-
-              {order.status === "assigned" ? (
-                <>
-                  <div className="order-progress">
-                    {["Aceptado", "Comprando", "En camino", "Entregado"].map(
-                      (step, i) => (
-                        <div
-                          key={step}
-                          className={`progress-step ${i <= order.progress ? "done" : ""}`}
-                        >
-                          <span className="progress-dot" />
-                          {step}
-                        </div>
-                      ),
+          {orders.length === 0 ? (
+            <p className="no-orders">No tienes mandaditos activos por ahora.</p>
+          ) : (
+            orders.map((order) => (
+              <div key={order.id} className="order-card">
+                <div className="order-top">
+                  <div className="order-avatar">
+                    {order.repa
+                      ? order.repa
+                          .split(" ")
+                          .map((w) => w.charAt(0))
+                          .join("")
+                      : "?"}
+                  </div>
+                  <div className="order-info">
+                    <h4>{order.description}</h4>
+                    {order.repa ? (
+                      <p>
+                        Repa: {order.repa} · ★ {order.repaRating} ·{" "}
+                        {order.vehicle}
+                      </p>
+                    ) : (
+                      <p>
+                        Sin repa todavía · {order.applications} repas se
+                        postularon
+                      </p>
                     )}
+                    <p>
+                      {order.timeAgo}
+                      {order.distance
+                        ? ` · ${order.distance}`
+                        : ` · ${order.place}`}
+                    </p>
                   </div>
-                  <div className="order-actions">
-                    <button className="whatsapp-btn" type="button">
-                      WhatsApp al repa
-                    </button>
-                    <button className="detail-btn" type="button">
-                      Ver detalle
-                    </button>
+                  <div className="order-price">
+                    <span>${order.reward}</span>
+                    <small>oferta</small>
                   </div>
-                </>
-              ) : (
-                <>
-                  <p className="order-note">
-                    Revisa las postulaciones y elige por calificación, no solo
-                    por precio.
-                  </p>
-                  <button className="applications-btn" type="button">
-                    Ver {order.applications} postulaciones
-                  </button>
-                </>
-              )}
-            </div>
-          ))}
+                </div>
+
+                <span className={`order-status ${order.status}`}>
+                  {order.status === "assigned" ? "En curso" : "Pendiente"}
+                </span>
+
+                {order.status === "assigned" ? (
+                  <>
+                    <div className="order-progress">
+                      {["Aceptado", "Comprando", "En camino", "Entregado"].map(
+                        (step, i) => (
+                          <div
+                            key={step}
+                            className={`progress-step ${i <= order.progress ? "done" : ""}`}
+                          >
+                            <span className="progress-dot" />
+                            {step}
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="order-actions">
+                      <button className="whatsapp-btn" type="button">
+                        WhatsApp al repa
+                      </button>
+                      <button className="detail-btn" type="button">
+                        Ver detalle
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <p className="order-note">
+                      Revisa las postulaciones y elige por calificación, no solo
+                      por precio.
+                    </p>
+                    <button className="applications-btn" type="button">
+                      Ver {order.applications} postulaciones
+                    </button>
+                  </>
+                )}
+              </div>
+            ))
+          )}
         </div>
       </main>
 
