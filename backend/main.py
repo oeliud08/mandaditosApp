@@ -75,7 +75,7 @@ def hash_password(password: str) -> str:
         base64.b64encode(digest).decode(),
     )
 
-
+# This part isnt working yet will work on it later
 def verify_password(password: str, stored: Optional[str]) -> bool:
     if not stored or stored == "GOOGLE_AUTH_USER":
         return False
@@ -127,19 +127,6 @@ def init_db():
             )
         """)
 
-        # Demo accounts are only created when explicitly requested, so they never
-        # exist in production with a known password.
-        if os.environ.get("SEED_DEMO_USERS") == "1":
-            cursor.execute(
-                "INSERT OR IGNORE INTO users (id, username, email, password, role) VALUES (1, 'default_driver', 'driver@test.com', ?, 'driver')",
-                (hash_password("123456"),),
-            )
-            cursor.execute(
-                "INSERT OR IGNORE INTO users (id, username, email, password, role) VALUES (2, 'default_client', 'client@test.com', ?, 'client')",
-                (hash_password("123456"),),
-            )
-
-
 init_db()
 
 
@@ -158,7 +145,7 @@ class UserLogin(BaseModel):
     password: str
     role: str
 
-
+# Isnt working yet will work on it later
 class GoogleAuth(BaseModel):
     email: str
     username: str
@@ -226,34 +213,34 @@ def login(data: UserLogin):
     return {"status": "success", "id": user[0], "username": user[1], "role": user[3]}
 
 
-@app.post("/google-login")
-def google_login(data: GoogleAuth):
-    # NOTE: this endpoint trusts the email sent by the client. Before using it for
-    # real, verify the Google ID token server-side (google-auth library).
-    # It is disabled unless ENABLE_GOOGLE_LOGIN=1 so it can't be abused to log in
-    # as someone else.
-    if os.environ.get("ENABLE_GOOGLE_LOGIN") != "1":
-        raise HTTPException(status_code=501, detail="Inicio de sesión con Google no disponible.")
+# @app.post("/google-login") ****Code will work later in login***
+# def google_login(data: GoogleAuth):
+#     # NOTE: this endpoint trusts the email sent by the client. Before using it for
+#     # real, verify the Google ID token server-side (google-auth library).
+#     # It is disabled unless ENABLE_GOOGLE_LOGIN=1 so it can't be abused to log in
+#     # as someone else.
+#     if os.environ.get("ENABLE_GOOGLE_LOGIN") != "1":
+#         raise HTTPException(status_code=501, detail="Inicio de sesión con Google no disponible.")
 
-    if data.role not in VALID_ROLES:
-        raise HTTPException(status_code=400, detail="Rol inválido.")
+#     if data.role not in VALID_ROLES:
+#         raise HTTPException(status_code=400, detail="Rol inválido.")
 
-    email_clean = data.email.strip().lower()
-    with get_conn() as conn:
-        db_user = conn.execute(
-            "SELECT id, username, role FROM users WHERE email = ?", (email_clean,)
-        ).fetchone()
+#     email_clean = data.email.strip().lower()
+#     with get_conn() as conn:
+#         db_user = conn.execute(
+#             "SELECT id, username, role FROM users WHERE email = ?", (email_clean,)
+#         ).fetchone()
 
-        if db_user:
-            user_id, username, role = db_user
-        else:
-            cursor = conn.execute(
-                "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)",
-                (data.username, email_clean, "GOOGLE_AUTH_USER", data.role),
-            )
-            user_id, username, role = cursor.lastrowid, data.username, data.role
+#         if db_user:
+#             user_id, username, role = db_user
+#         else:
+#             cursor = conn.execute(
+#                 "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)",
+#                 (data.username, email_clean, "GOOGLE_AUTH_USER", data.role),
+#             )
+#             user_id, username, role = cursor.lastrowid, data.username, data.role
 
-    return {"status": "success", "id": user_id, "username": username, "role": role}
+#     return {"status": "success", "id": user_id, "username": username, "role": role}
 
 
 # ---------------------------------------------------------------------------
@@ -337,6 +324,18 @@ def create_order(order_data: dict):
 
     return {"status": "success", "message": "Mandadito publicado con éxito"}
 
+#def to delete an order
+@app.delete("/orders/{order_id}")
+def delete_order(order_id: int):
+    conn = sqlite3.connect("mandaditos.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM orders WHERE id = ?", (order_id,))
+    if cursor.rowcount == 0:
+        conn.close()
+        raise HTTPException(status_code=404, detail="Pedido no encontrado.")
+    conn.commit()
+    conn.close()
+    return {"status": "success", "message": "Pedido eliminado con éxito."}
 
 @app.get("/orders/client/{client_id}")
 def get_client_orders(client_id: int):

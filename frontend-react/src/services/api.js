@@ -71,10 +71,19 @@ export async function getClientOrders(clientId) {
   const data = await request(`/orders/client/${clientId}`, undefined, "Error al obtener pedidos del cliente");
   return data.orders || [];
 }
-
+// Create a new order
 export function createOrder(orderData) {
   return request("/orders", jsonOptions("POST", orderData), "Error al publicar el pedido");
 }
+// Delete an order
+export const deleteOrder = async  (orderId) => {
+  const response = await fetch(`${API_URL}/orders/${orderId}`, { method: "DELETE" });
+  if (!response.ok) {
+    throw new Error("Error al eliminar el pedido");
+  }
+  return response.json();
+}
+
 
 export function acceptOrder(orderId, driverId) {
   return request(`/orders/${orderId}/accept`, jsonOptions("POST", { driver_id: driverId }), "No se pudo aceptar el pedido");

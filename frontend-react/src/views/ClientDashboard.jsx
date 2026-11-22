@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { getClientOrders, createOrder } from "../services/api";
 import "./ClientDashboard.css";
 import "../../src/views/Login.css";
+import { deleteOrder } from "../services/api";
 
 const POLL_MS = 4000;
 
@@ -101,9 +102,17 @@ export default function ClientDashboard({ user, onLogout }) {
     // TODO: abrir el modal con los datos del pedido — después del endpoint en Python
   };
 
-  const handleDelete = (order) => {
+  const handleDelete = async (order) => {
     console.log("Eliminar pedido", order.id);
     // TODO: llamar a deleteOrder(order.id) — después del endpoint en Python
+    if (window.confirm("¿Estás seguro de eliminar este mandadito?")) {
+      try {
+        await deleteOrder(order.id);
+        await fetchOrders();
+      } catch (error) {
+        console.error("Error al eliminar pedido:", error);
+      }
+    }
   };
 
   const handleCreateOrder = async (e) => {
@@ -256,7 +265,7 @@ export default function ClientDashboard({ user, onLogout }) {
                     <p>Destino: {order.delivery_location}</p>
                     {order.comments && <p>{order.comments}</p>}
                   </div>
-                  
+
                   <div className="order-price">
                     <span>${order.reward}</span>
                     <small>oferta</small>
