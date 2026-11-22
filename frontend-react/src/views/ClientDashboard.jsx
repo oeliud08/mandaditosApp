@@ -255,25 +255,8 @@ export default function ClientDashboard({ user, onLogout }) {
                     <p>Origen: {order.pickup_location}</p>
                     <p>Destino: {order.delivery_location}</p>
                     {order.comments && <p>{order.comments}</p>}
-
-                    {order.repa ? (
-                      <p>
-                        Repa: {order.repa} · ★ {order.repaRating} ·{" "}
-                        {order.vehicle}
-                      </p>
-                    ) : (
-                      <p>
-                        Sin repa todavía · {order.applications} repas se
-                        postularon
-                      </p>
-                    )}
-                    <p>
-                      {order.timeAgo}
-                      {order.distance
-                        ? ` · ${order.distance}`
-                        : ` · ${order.place}`}
-                    </p>
                   </div>
+                  
                   <div className="order-price">
                     <span>${order.reward}</span>
                     <small>oferta</small>
