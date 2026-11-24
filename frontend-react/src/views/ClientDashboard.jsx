@@ -168,13 +168,19 @@ const handleEdit = (order) => {
     }
   };
 
-  if (loading) {
+  // Filter orders based on search input
+  const filteredOrders = orders.filter((order) => {
+    const query = search.trim().toLowerCase();
+    if (!query) return true; // If search is empty, show all orders
+    const description = (order.description || "").toLowerCase();
+    const pickup = (order.pickup_location || "").toLowerCase();
+    const dropoff = (order.delivery_location || "").toLowerCase();
     return (
-      <div className="dashboard-container">
-        <p className="no-orders">Cargando tus mandaditos...</p>
-      </div>
+      description.includes(query) ||
+      pickup.includes(query) ||
+      dropoff.includes(query)
     );
-  }
+  });
 
   return (
     <div className="dashboard-container phone-frame">
@@ -270,7 +276,7 @@ const handleEdit = (order) => {
           {orders.length === 0 ? (
             <p className="no-orders">No tienes mandaditos activos por ahora.</p>
           ) : (
-            orders.map((order) => (
+            filteredOrders.map((order) => (
               <div key={order.id} className="order-card">
                 <div className="order-top">
                   <div className="order-avatar">
