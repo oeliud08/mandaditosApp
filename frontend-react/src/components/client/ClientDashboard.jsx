@@ -7,6 +7,7 @@ import {
 } from "../../services/api";
 import "./ClientDashboard.css";
 import BottomNav from "../BottomNav";
+import OrderCard from "../OrderCard";
 
 const POLL_MS = 4000;
 
@@ -373,7 +374,7 @@ export default function ClientDashboard({ user, onLogout }) {
           </div>
         </div>
       )}
-      <BottomNav activeTab={activeTab === "inicio" ? "inicio" : activeTab === "directorio" ? "directorio" : ""} onTabChange={setActiveTab} />
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   );
 }

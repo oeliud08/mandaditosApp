@@ -5,6 +5,7 @@ import Register from './components/auth/Register';
 import ClientDashboard from './components/client/ClientDashboard';
 import DriverDashboard from './components/driver/DriverDashboard';
 
+
 const STORAGE_KEY = 'mandaditos_user';
 
 function loadStoredUser() {
