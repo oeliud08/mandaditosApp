@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { getClientOrders, createOrder } from "../services/api";
+import { getClientOrders, createOrder, deleteOrder, updateOrder } from "../services/api";
 import "./ClientDashboard.css";
 import "../../src/views/Login.css";
 import { deleteOrder } from "../services/api";
@@ -55,6 +55,7 @@ export default function ClientDashboard({ user, onLogout }) {
   const [description, setDescription] = useState("");
   const [comments, setComments] = useState("");
   const [reward, setReward] = useState("");
+  const [editingOrder, setEditingOrder] = useState(null);
 
   // Only depends on the user id, so the polling interval is not reset on every update.
   const fetchOrders = useCallback(async () => {
@@ -77,7 +78,6 @@ export default function ClientDashboard({ user, onLogout }) {
     }
   }, [user?.id]);
 
-  // Poll for updates / TODO Connect DB Step 5
   useEffect(() => {
     fetchOrders();
     const interval = setInterval(fetchOrders, POLL_MS);
@@ -97,11 +97,65 @@ export default function ClientDashboard({ user, onLogout }) {
     if (submitting) return;
     setShowNewOrderModal(false);
   };
-  const handleEdit = (order) => {
-    console.log("Editar pedido", order.id);
-    // TODO: abrir el modal con los datos del pedido — después del endpoint en Python
-  };
+  
+  // Handle Create order
+const handleCreateOrder = async (e) => {
+  e.preventDefault();
+  if (submitting) return;
 
+  const rewardNumber = parseFloat(reward);
+  if (!(rewardNumber > 0)) {
+    setFormError("La recompensa debe ser mayor a 0.");
+    return;
+  }
+
+  setSubmitting(true);
+  setFormError("");
+  try {
+    if (editingOrder) {
+      // Estás editando: actualiza el pedido que ya existe
+      await updateOrder(editingOrder.id, {
+        pickup_location: pickup.trim(),
+        delivery_location: dropoff.trim(),
+        description: description.trim(),
+        comments: comments.trim(),
+        reward: rewardNumber,
+      });
+    } else {
+      // Estás creando uno nuevo
+      await createOrder({
+        pickup_location: pickup.trim(),
+        delivery_location: dropoff.trim(),
+        description: description.trim(),
+        comments: comments.trim(),
+        reward: rewardNumber,
+        client_id: user.id,
+      });
+    }
+    resetForm();
+    setEditingOrder(null); // Limpia el modo edición
+    setShowNewOrderModal(false);
+    await fetchOrders();
+  } catch (error) {
+    setFormError(error.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
+
+// Handle Edit order
+const handleEdit = (order) => {
+  setEditingOrder(order);
+  setPickup(order.pickup_location);
+  setDropoff(order.delivery_location);
+  setDescription(order.description);
+  setComments(order.comments || "");
+  setReward(order.reward.toString());
+  setShowNewOrderModal(true);
+};
+  
+    
+  //Handle Delete Order
   const handleDelete = async (order) => {
     console.log("Eliminar pedido", order.id);
     // TODO: llamar a deleteOrder(order.id) — después del endpoint en Python
@@ -112,37 +166,6 @@ export default function ClientDashboard({ user, onLogout }) {
       } catch (error) {
         console.error("Error al eliminar pedido:", error);
       }
-    }
-  };
-
-  const handleCreateOrder = async (e) => {
-    e.preventDefault();
-    if (submitting) return;
-
-    const rewardNumber = parseFloat(reward);
-    if (!(rewardNumber > 0)) {
-      setFormError("La recompensa debe ser mayor a 0.");
-      return;
-    }
-
-    setSubmitting(true);
-    setFormError("");
-    try {
-      await createOrder({
-        pickup_location: pickup.trim(),
-        delivery_location: dropoff.trim(),
-        description: description.trim(),
-        comments: comments.trim(),
-        reward: rewardNumber,
-        client_id: user.id,
-      });
-      resetForm();
-      setShowNewOrderModal(false);
-      await fetchOrders();
-    } catch (error) {
-      setFormError(error.message);
-    } finally {
-      setSubmitting(false);
     }
   };
 

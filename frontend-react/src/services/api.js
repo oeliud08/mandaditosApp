@@ -66,7 +66,7 @@ export async function getDriverOrders(driverId, status = null) {
   const data = await request(`/orders/driver/${driverId}${query}`, undefined, "Error al obtener pedidos del repartidor");
   return data.orders || [];
 }
-
+//display all orders for a specific client
 export async function getClientOrders(clientId) {
   const data = await request(`/orders/client/${clientId}`, undefined, "Error al obtener pedidos del cliente");
   return data.orders || [];
@@ -83,7 +83,16 @@ export const deleteOrder = async  (orderId) => {
   }
   return response.json();
 }
-
+//Edit an order
+export const updateOrder = async (orderId, orderData) => {
+  const response = await request(`${API_URL}/orders/${orderId}`, 
+  {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(orderData),
+  });
+  return response.json();
+}
 
 export function acceptOrder(orderId, driverId) {
   return request(`/orders/${orderId}/accept`, jsonOptions("POST", { driver_id: driverId }), "No se pudo aceptar el pedido");

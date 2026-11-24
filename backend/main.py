@@ -344,6 +344,34 @@ def get_client_orders(client_id: int):
 
     return {"status": "success", "orders": [serialize_order(r) for r in rows]}
 
+# Edit Order
+@app.put("/orders/{order_id}")
+def update_order(order_id: int, data: dict):
+    
+    try:
+        reward = float(data.get("reward"))
+    except (TypeError, ValueError):
+            raise HTTPException(status_code=400, detail="La recompensa debe ser un número.")
+    if reward <= 0:
+        raise HTTPException(status_code=400, detail="La recompensa debe ser mayor a 0.")
+    
+    description = _require_text(data.get("description"), "descripción")
+    pickup_location = _require_text(
+        data.get("pickup_location") or data.get("pickupLocation"), "lugar de recolección"
+    )
+    delivery_location = _require_text(
+        data.get("delivery_location") or data.get("deliveryLocation"), "lugar de entrega"
+    )
+    comments = (data.get("comments") or "").strip()
+    with get_conn() as conn:
+        cursor = conn.execute(
+            "UPDATE orders SET description = ?, pickup_location = ?, delivery_location = ?, reward = ?, comments = ? WHERE id = ?",
+            (description, pickup_location, delivery_location, reward, comments, order_id)
+        )
+        if cursor.rowcount == 0:
+            raise HTTPException(status_code=404, detail="Pedido no encontrado")
+    
+    return {"status": "success", "message": "El pedido ha sido actualizado con éxito."}
 
 @app.get("/orders/pending")
 @app.get("/orders/available")
