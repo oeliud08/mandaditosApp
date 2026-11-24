@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import { getClientOrders, createOrder, deleteOrder, updateOrder } from "../services/api";
 import "./ClientDashboard.css";
 import "../../src/views/Login.css";
-import { deleteOrder } from "../services/api";
 
 const POLL_MS = 4000;
 
