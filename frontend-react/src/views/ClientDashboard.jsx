@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
-import { getClientOrders, createOrder, deleteOrder, updateOrder } from "../services/api";
+import {
+  getClientOrders,
+  createOrder,
+  deleteOrder,
+  updateOrder,
+} from "../services/api";
 import "./ClientDashboard.css";
 import "../../src/views/Login.css";
 
@@ -55,7 +60,7 @@ export default function ClientDashboard({ user, onLogout }) {
   const [comments, setComments] = useState("");
   const [reward, setReward] = useState("");
   const [editingOrder, setEditingOrder] = useState(null);
-
+  const [activeTab, setActiveTab] = useState("inicio"); // "active" or "history"
   // Only depends on the user id, so the polling interval is not reset on every update.
   const fetchOrders = useCallback(async () => {
     if (!user?.id) {
@@ -96,64 +101,63 @@ export default function ClientDashboard({ user, onLogout }) {
     if (submitting) return;
     setShowNewOrderModal(false);
   };
-  
+
   // Handle Create order
-const handleCreateOrder = async (e) => {
-  e.preventDefault();
-  if (submitting) return;
+  const handleCreateOrder = async (e) => {
+    e.preventDefault();
+    if (submitting) return;
 
-  const rewardNumber = parseFloat(reward);
-  if (!(rewardNumber > 0)) {
-    setFormError("La recompensa debe ser mayor a 0.");
-    return;
-  }
-
-  setSubmitting(true);
-  setFormError("");
-  try {
-    if (editingOrder) {
-      // Estás editando: actualiza el pedido que ya existe
-      await updateOrder(editingOrder.id, {
-        pickup_location: pickup.trim(),
-        delivery_location: dropoff.trim(),
-        description: description.trim(),
-        comments: comments.trim(),
-        reward: rewardNumber,
-      });
-    } else {
-      // Estás creando uno nuevo
-      await createOrder({
-        pickup_location: pickup.trim(),
-        delivery_location: dropoff.trim(),
-        description: description.trim(),
-        comments: comments.trim(),
-        reward: rewardNumber,
-        client_id: user.id,
-      });
+    const rewardNumber = parseFloat(reward);
+    if (!(rewardNumber > 0)) {
+      setFormError("La recompensa debe ser mayor a 0.");
+      return;
     }
-    resetForm();
-    setEditingOrder(null); // Limpia el modo edición
-    setShowNewOrderModal(false);
-    await fetchOrders();
-  } catch (error) {
-    setFormError(error.message);
-  } finally {
-    setSubmitting(false);
-  }
-};
 
-// Handle Edit order
-const handleEdit = (order) => {
-  setEditingOrder(order);
-  setPickup(order.pickup_location);
-  setDropoff(order.delivery_location);
-  setDescription(order.description);
-  setComments(order.comments || "");
-  setReward(order.reward.toString());
-  setShowNewOrderModal(true);
-};
-  
-    
+    setSubmitting(true);
+    setFormError("");
+    try {
+      if (editingOrder) {
+        // Estás editando: actualiza el pedido que ya existe
+        await updateOrder(editingOrder.id, {
+          pickup_location: pickup.trim(),
+          delivery_location: dropoff.trim(),
+          description: description.trim(),
+          comments: comments.trim(),
+          reward: rewardNumber,
+        });
+      } else {
+        // Estás creando uno nuevo
+        await createOrder({
+          pickup_location: pickup.trim(),
+          delivery_location: dropoff.trim(),
+          description: description.trim(),
+          comments: comments.trim(),
+          reward: rewardNumber,
+          client_id: user.id,
+        });
+      }
+      resetForm();
+      setEditingOrder(null); // Limpia el modo edición
+      setShowNewOrderModal(false);
+      await fetchOrders();
+    } catch (error) {
+      setFormError(error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Handle Edit order
+  const handleEdit = (order) => {
+    setEditingOrder(order);
+    setPickup(order.pickup_location);
+    setDropoff(order.delivery_location);
+    setDescription(order.description);
+    setComments(order.comments || "");
+    setReward(order.reward.toString());
+    setShowNewOrderModal(true);
+  };
+
   //Handle Delete Order
   const handleDelete = async (order) => {
     console.log("Eliminar pedido", order.id);
@@ -301,7 +305,7 @@ const handleEdit = (order) => {
                     <small>oferta</small>
                   </div>
                 </div>
-
+                {/* Order Status */}
                 <span className={`order-status ${order.status}`}>
                   {order.status === "assigned" ? "En curso" : "Pendiente"}
                 </span>
@@ -447,6 +451,38 @@ const handleEdit = (order) => {
           </div>
         </div>
       )}
+      <nav className="bottom-nav">
+        <button
+          className={activeTab === "inicio" ? "nav-item active" : "nav-item"}
+          onClick={() => setActiveTab("inicio")}
+        >
+          <span>🏠</span>
+          <span>Inicio</span>
+        </button>
+        <button
+          className={
+            activeTab === "directorio" ? "nav-item active" : "nav-item"
+          }
+          onClick={() => setActiveTab("directorio")}
+        >
+          <span>📖</span>
+          <span>Directorio</span>
+        </button>
+        <button
+          className={activeTab === "favoritos" ? "nav-item active" : "nav-item"}
+          onClick={() => setActiveTab("favoritos")}
+        >
+          <span>⭐</span>
+          <span>Favoritos</span>
+        </button>
+        <button
+          className={activeTab === "perfil" ? "nav-item active" : "nav-item"}
+          onClick={() => setActiveTab("perfil")}
+        >
+          <span>👤</span>
+          <span>Mi Perfil</span>
+        </button>
+      </nav>
     </div>
   );
 }
