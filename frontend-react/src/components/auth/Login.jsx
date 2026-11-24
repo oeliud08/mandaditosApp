@@ -1,7 +1,7 @@
 // src/views/Login.jsx
 import { useState } from 'react';
-import { loginUser } from '../services/api';
-import './Login.css';
+import { loginUser } from '../../services/api';
+import './Login.css'; // Shared styles with Register
 
 export default function Login({ onLoginSuccess, onSwitchToRegister }) { // <-- Asegúrate de recibir esta prop aquí
   const [email, setEmail] = useState('');

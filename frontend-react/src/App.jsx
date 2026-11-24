@@ -1,9 +1,9 @@
 // src/App.jsx
 import { useState } from 'react';
-import Login from './views/Login';
-import Register from './views/Register';
-import ClientDashboard from './views/ClientDashboard';
-import DriverDashboard from './views/DriverDashboard';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import ClientDashboard from './components/client/ClientDashboard';
+import DriverDashboard from './components/driver/DriverDashboard';
 
 const STORAGE_KEY = 'mandaditos_user';
 

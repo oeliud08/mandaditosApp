@@ -4,9 +4,9 @@ import {
   createOrder,
   deleteOrder,
   updateOrder,
-} from "../services/api";
+} from "../../services/api";
 import "./ClientDashboard.css";
-import "../../src/views/Login.css";
+import BottomNav from "../BottomNav";
 
 const POLL_MS = 4000;
 
@@ -283,85 +283,7 @@ export default function ClientDashboard({ user, onLogout }) {
             <p className="no-orders">No tienes mandaditos activos por ahora.</p>
           ) : (
             filteredOrders.map((order) => (
-              <div key={order.id} className="order-card">
-                <div className="order-top">
-                  <div className="order-avatar">
-                    {order.repa
-                      ? order.repa
-                          .split(" ")
-                          .map((w) => w.charAt(0))
-                          .join("")
-                      : "?"}
-                  </div>
-                  <div className="order-info">
-                    <h4>{order.description}</h4>
-                    <p>Origen: {order.pickup_location}</p>
-                    <p>Destino: {order.delivery_location}</p>
-                    {order.comments && <p>{order.comments}</p>}
-                  </div>
-
-                  <div className="order-price">
-                    <span>${order.reward}</span>
-                    <small>oferta</small>
-                  </div>
-                </div>
-                {/* Order Status */}
-                <span className={`order-status ${order.status}`}>
-                  {order.status === "assigned" ? "En curso" : "Pendiente"}
-                </span>
-
-                {order.status === "assigned" ? (
-                  <>
-                    <div className="order-progress">
-                      {["Aceptado", "Comprando", "En camino", "Entregado"].map(
-                        (step, i) => (
-                          <div
-                            key={step}
-                            className={`progress-step ${i <= 0 ? "done" : ""}`}
-                          >
-                            <span className="progress-dot" />
-                            {step}
-                          </div>
-                        ),
-                      )}
-                    </div>
-                    <div className="order-actions">
-                      <button className="whatsapp-btn" type="button">
-                        WhatsApp al repa
-                      </button>
-                      <button className="detail-btn" type="button">
-                        Ver detalle
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="order-note">
-                      Sin repa todavía. Cuando un repa se postule, lo verás
-                      aquí.
-                    </p>
-                    <button className="applications-btn" type="button">
-                      Ver postulaciones
-                    </button>
-                    <div className="order-actions">
-                      <button
-                        className="edit-btn"
-                        type="button"
-                        onClick={() => handleEdit(order)}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        className="delete-btn"
-                        type="button"
-                        onClick={() => handleDelete(order)}
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
+              <OrderCard key={order.id} order={order} onEdit={handleEdit} onDelete={handleDelete} />
             ))
           )}
         </div>
@@ -451,38 +373,7 @@ export default function ClientDashboard({ user, onLogout }) {
           </div>
         </div>
       )}
-      <nav className="bottom-nav">
-        <button
-          className={activeTab === "inicio" ? "nav-item active" : "nav-item"}
-          onClick={() => setActiveTab("inicio")}
-        >
-          <span>🏠</span>
-          <span>Inicio</span>
-        </button>
-        <button
-          className={
-            activeTab === "directorio" ? "nav-item active" : "nav-item"
-          }
-          onClick={() => setActiveTab("directorio")}
-        >
-          <span>📖</span>
-          <span>Directorio</span>
-        </button>
-        <button
-          className={activeTab === "favoritos" ? "nav-item active" : "nav-item"}
-          onClick={() => setActiveTab("favoritos")}
-        >
-          <span>⭐</span>
-          <span>Favoritos</span>
-        </button>
-        <button
-          className={activeTab === "perfil" ? "nav-item active" : "nav-item"}
-          onClick={() => setActiveTab("perfil")}
-        >
-          <span>👤</span>
-          <span>Mi Perfil</span>
-        </button>
-      </nav>
+      <BottomNav activeTab={activeTab === "inicio" ? "inicio" : activeTab === "directorio" ? "directorio" : ""} onTabChange={setActiveTab} />
     </div>
   );
 }
