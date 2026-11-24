@@ -61,6 +61,7 @@ export default function ClientDashboard({ user, onLogout }) {
   const [comments, setComments] = useState("");
   const [reward, setReward] = useState("");
   const [editingOrder, setEditingOrder] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
   const [activeTab, setActiveTab] = useState("inicio"); // "active" or "history"
   // Only depends on the user id, so the polling interval is not reset on every update.
   const fetchOrders = useCallback(async () => {
@@ -187,6 +188,14 @@ export default function ClientDashboard({ user, onLogout }) {
     );
   });
 
+  //Active switch to completed
+  const visibleOrders = filteredOrders.filter((order) => {
+    if (showHistory) {
+      return order.status === "completed";
+    }
+    return order.status !== "completed";
+  });
+
   return (
     <div className="dashboard-container phone-frame">
       <header className="dashboard-header">
@@ -252,8 +261,28 @@ export default function ClientDashboard({ user, onLogout }) {
         {/* Dashboard Action Bar */}
         <div className="dashboard-action-bar">
           <h3>Mis mandaditos</h3>
-          <button className="history-link" type="button">
-            Ver historial
+          <button
+            className="history-link"
+            type="button"
+            onClick={() => setShowHistory(!showHistory)}
+          >
+            {showHistory ? "Ver activos" : "Ver completados"}
+            {visibleOrders.length === 0 ? (
+              <p className="no-orders">
+                {showHistory
+                  ? "No tienes mandaditos completados todavía."
+                  : "No tienes mandaditos activos por ahora."}
+              </p>
+            ) : (
+              visibleOrders.map((order) => (
+                <OrderCard
+                  key={order.id}
+                  order={order}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
           </button>
         </div>
 
@@ -284,7 +313,12 @@ export default function ClientDashboard({ user, onLogout }) {
             <p className="no-orders">No tienes mandaditos activos por ahora.</p>
           ) : (
             filteredOrders.map((order) => (
-              <OrderCard key={order.id} order={order} onEdit={handleEdit} onDelete={handleDelete} />
+              <OrderCard
+                key={order.id}
+                order={order}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
             ))
           )}
         </div>
