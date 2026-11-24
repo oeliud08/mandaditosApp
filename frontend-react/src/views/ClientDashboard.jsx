@@ -261,7 +261,9 @@ const handleEdit = (order) => {
             <span className="home-stat-label">Mandaditos activos</span>
           </div>
           <div className="home-stat">
-            <span className="home-stat-number">12</span>
+            <span className="home-stat-number">
+              {orders.filter((o) => o.status === "completed").length}
+            </span>
             <span className="home-stat-label">Completados</span>
           </div>
           <div className="home-stat">
