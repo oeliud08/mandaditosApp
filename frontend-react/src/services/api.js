@@ -84,14 +84,10 @@ export const deleteOrder = async  (orderId) => {
   return response.json();
 }
 //Edit an order
-export const updateOrder = async (orderId, orderData) => {
-  const response = await request(`${API_URL}/orders/${orderId}`, 
-  {
-  method: "PUT",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(orderData),
-  });
-  return response.json();
+export function updateOrder (orderId, orderData) {
+  return request(`/orders/${orderId}`, 
+  jsonOptions("PUT", orderData), "Error al actualizar el pedido")
+  
 }
 
 export function acceptOrder(orderId, driverId) {
