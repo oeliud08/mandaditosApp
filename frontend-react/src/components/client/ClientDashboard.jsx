@@ -294,12 +294,12 @@ export default function ClientDashboard({ user, onLogout }) {
         {loadError && <p className="form-error">{loadError}</p>}
         {/* Orders Map */}
         <div className="orders-grid">
-          {orders.length === 0 ? (
+          {visibleOrders.length === 0 ? (
             <p className="no-orders">
               {showHistory ? "No tienes mandaditos completados todavía." 
               : "No tienes mandaditos activos por ahora." }</p>
           ) : (
-            filteredOrders.map((order) => (
+            visibleOrders.map((order) => (
               <OrderCard
                 key={order.id}
                 order={order}
