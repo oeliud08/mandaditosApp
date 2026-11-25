@@ -267,22 +267,7 @@ export default function ClientDashboard({ user, onLogout }) {
             onClick={() => setShowHistory(!showHistory)}
           >
             {showHistory ? "Ver activos" : "Ver completados"}
-            {visibleOrders.length === 0 ? (
-              <p className="no-orders">
-                {showHistory
-                  ? "No tienes mandaditos completados todavía."
-                  : "No tienes mandaditos activos por ahora."}
-              </p>
-            ) : (
-              visibleOrders.map((order) => (
-                <OrderCard
-                  key={order.id}
-                  order={order}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
-              ))
-            )}
+            
           </button>
         </div>
 
@@ -310,7 +295,9 @@ export default function ClientDashboard({ user, onLogout }) {
         {/* Orders Map */}
         <div className="orders-grid">
           {orders.length === 0 ? (
-            <p className="no-orders">No tienes mandaditos activos por ahora.</p>
+            <p className="no-orders">
+              {showHistory ? "No tienes mandaditos completados todavía." 
+              : "No tienes mandaditos activos por ahora." }</p>
           ) : (
             filteredOrders.map((order) => (
               <OrderCard
